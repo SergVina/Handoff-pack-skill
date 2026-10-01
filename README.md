@@ -4,11 +4,16 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue)](https://agentskills.io)
-![Version](https://img.shields.io/badge/version-1.1.0-informational)
+![Version](https://img.shields.io/badge/version-1.2.0-informational)
 
-Handoff Pack is an [Agent Skill](https://agentskills.io) that turns an idea, a need, or an existing project into a **validated, agent-ready documentation pack**. It interviews you until every important detail is settled, asks for your explicit approval, and only then writes a set of Markdown files that any coding agent in your IDE (Claude Code, GitHub Copilot agent mode, Cursor and others) can read and execute from step one.
+Handoff Pack is a pair of [Agent Skills](https://agentskills.io) that carry a project from the chat where you plan it to the IDE where an agent builds it, and back:
 
-The skill interviews you and writes the pack in your own language.
+| Skill | Where it runs | What it does |
+|---|---|---|
+| **`handoff-pack`** | Claude chat (web or desktop) | Interviews you until every important detail is settled, asks for your explicit approval, and only then writes a **validated, agent-ready Markdown pack**. Also updates the pack from the agent's reports. |
+| **`handoff-implement`** | Your IDE agent (Claude Code, GitHub Copilot agent mode, Cursor and others) | Reads the pack, checks its integrity, confirms its understanding with you, implements one task at a time within the limits you set, and writes phase reports in the exact format `handoff-pack` needs to update the pack. |
+
+Both talk to you and write in your own language. The pack is plain Markdown and works with any coding agent **even without `handoff-implement`**: the `AGENTS.md` file it ships carries the basic working rules. The second skill adds rigor on the IDE side.
 
 ---
 
@@ -17,7 +22,9 @@ The skill interviews you and writes the pack in your own language.
 - [The problem](#the-problem)
 - [Who it is for](#who-it-is-for)
 - [Use cases](#use-cases)
+- [The full cycle](#the-full-cycle)
 - [How it works](#how-it-works)
+- [How handoff-implement works](#how-handoff-implement-works)
 - [What you get](#what-you-get)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -72,6 +79,21 @@ Handoff Pack closes that gap with a structured, verified handoff.
 | **Onboarding an agent to a legacy project** | Documents conventions, structure and agent rules in a pack the agent reads automatically. |
 | **Meeting notes or a rough brief to an executable plan** | Turns scattered notes into requirements with acceptance criteria and ordered tasks, after confirming every gap with you. |
 
+## The full cycle
+
+```mermaid
+flowchart LR
+    A[Claude chat<br/>handoff-pack] -- handoff pack --> B[IDE agent<br/>handoff-implement]
+    B -- phase report --> A
+```
+
+1. In the chat, `handoff-pack` interviews you and writes the pack.
+2. In the IDE, `handoff-implement` reads it, validates it and executes the tasks one by one.
+3. At the end of each phase, it writes a report in `handoff/reports/`, in the exact format that `handoff-pack`'s Update mode expects.
+4. You take the report back to the chat, and `handoff-pack` updates the pack after you confirm each change.
+
+Both skills follow the same **pack format contract**, [`spec/PACK-FORMAT.md`](spec/PACK-FORMAT.md) (format 1): files, IDs, statuses, sources, required sections, task cards and the report. Each skill ships an identical copy, so each one works on its own.
+
 ## How it works
 
 ```mermaid
@@ -95,19 +117,46 @@ flowchart LR
 5. **Write and verify.** The pack is written from templates and checked for coverage, traceability, consistency and zero invented facts.
 6. **Hand off.** You drop the files into your repo and paste the ready-made kickoff prompt into your agent.
 
+Besides the full pack, `handoff-pack` has a **Lite** mode (a single `handoff/HANDOFF.md` for a contained change) and an **Update** mode (revise an existing pack from an agent report or a new decision, keeping IDs and history). For people who do not code, it interviews in plain language and adds a `00-START-HERE.md` guide.
+
+## How handoff-implement works
+
+```mermaid
+flowchart LR
+    A[Locate pack<br/>check format version] --> B[Read the whole pack]
+    B --> C[Integrity checks]
+    C --> D[Understanding gate<br/>your OK]
+    D --> E[Task loop]
+    E --> F{End of phase<br/>or blocked?}
+    F -- no --> E
+    F -- yes --> G[Phase report<br/>handoff/reports/]
+```
+
+1. **Startup.** Finds `handoff/README.md` (Full) or `handoff/HANDOFF.md` (Lite), checks the `Pack format` line, and reads everything in the pack's reading order. If there is no pack, it sends you to `handoff-pack` instead of improvising a plan.
+2. **Integrity checks.** Duplicate IDs, references to IDs that do not exist, requirements without tasks, tasks without requirements, cards without acceptance criteria or a way to verify, ❓ items blocking the next task, contradictions between files and between the pack and the code.
+3. **Understanding gate.** A summary of what it will build (10 lines at most), the problems found and the doubts that block the next task. No code until you say OK.
+4. **Task loop.** Pre-check (dependencies done, nothing ❓ blocking), a short technical plan, implementation within the card's scope, literal verification of every acceptance criterion, and a progress log entry.
+5. **Hard limits.** It never changes your decisions (`D-xx`) or requirements (`RF`/`RNF`), decides 🔶 items only within their written limits, stops and asks on anything not delegated, reports contradictions instead of "fixing" the pack, and never expands the scope. With a non-technical owner it explains results in plain language and asks before anything that costs money, creates accounts or deletes data.
+6. **Phase report.** `handoff/reports/phase-<N>-<YYYY-MM-DD>.md` with nine fixed sections, always declaring decisions that were not delegated.
+
 ## What you get
 
 ```text
 your-repo/
-├── AGENTS.md                  # Short pointer agents read automatically
+├── AGENTS.md                  # Short pointer and working rules agents read automatically
+├── CLAUDE.md                  # Only if you use Claude Code: imports AGENTS.md
 └── handoff/
-    ├── README.md              # Reading order, agent rules, kickoff prompts
-    ├── 01-CONTEXT.md          # Problem, users, goals, non-goals, decisions, glossary
-    ├── 02-ARCHITECTURE.md     # Stack, structure, components, data, integrations
-    ├── 03-REQUIREMENTS.md     # Functional and non-functional requirements + acceptance criteria
-    ├── 04-ACTION-PLAN.md      # Phased, self-contained tasks, progress log, traceability
-    └── 05-PENDING.md          # Delegated decisions, external blockers, risks
+    ├── 00-START-HERE.md       # Only for non-technical owners: plain-language guide
+    ├── README.md              # Pack format, reading order, agent rules, kickoff prompts, history
+    ├── 01-CONTEXT.md          # Problem, users, goals, constraints, decisions, glossary, statement inventory
+    ├── 02-ARCHITECTURE.md     # Stack, current and target state, components, data, integrations
+    ├── 03-REQUIREMENTS.md     # Functional and non-functional requirements, edge cases
+    ├── 04-ACTION-PLAN.md      # Phased, self-contained tasks, progress, traceability, progress log
+    ├── 05-PENDING.md          # Delegated decisions, external blockers, risks
+    └── reports/               # Phase reports written by the agent
 ```
+
+In Lite mode, `handoff/` holds a single `HANDOFF.md` plus `reports/`.
 
 Every item carries a status:
 
@@ -119,42 +168,57 @@ Every item carries a status:
 
 There is no "assumed" status. If something important is unknown, the skill asks.
 
-`AGENTS.md` can also be copied as `CLAUDE.md` or `.github/copilot-instructions.md` if your tool prefers those files.
+`AGENTS.md` is read natively by Copilot, Cursor and most agents. Claude Code reads `CLAUDE.md`, so the pack adds one whose first line, `@AGENTS.md`, imports the same rules. Existing agent files are never overwritten.
 
 ## Installation
 
-### Claude (web and desktop)
+What goes where:
 
-1. Download `handoff-pack.zip` from the [latest release](../../releases/latest), or build it yourself with `./scripts/build-zip.sh`.
+| Skill | Install it in | Required? |
+|---|---|---|
+| `handoff-pack` | Claude (web or desktop), where you plan | Yes: it creates and updates the pack |
+| `handoff-implement` | Your IDE agent, where the code is written | Optional but recommended; without it the pack still works through `AGENTS.md` |
+
+Each release has one ZIP per skill: `handoff-pack.zip` and `handoff-implement.zip`. You can also build them with `./scripts/build-zip.sh` (output in `dist/`).
+
+### `handoff-pack` in Claude (web and desktop)
+
+1. Download `handoff-pack.zip` from the [latest release](../../releases/latest).
 2. Make sure code execution is enabled in your Claude settings.
 3. In the Skills section, choose **Create skill → Upload a skill** and select the ZIP.
 
 The exact menu may change; see Anthropic's guide [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude) if it looks different. Custom skills you upload are private to your account.
 
-### Claude Code (plugin marketplace)
+### `handoff-implement` in Claude Code (plugin marketplace)
+
+The plugin installs both skills. In Claude Code you will mostly use `handoff-implement`; `handoff-pack` stays available to plan or update a pack inside the repository.
 
 ```text
 /plugin marketplace add SergVina/Handoff-pack-skill
 /plugin install handoff-pack@handoff-pack
 ```
 
-### Claude Code (manual)
+### `handoff-implement` in Claude Code (manual)
 
 Copy the skill folder into your personal or project skills directory:
 
 ```bash
 # Personal (all projects)
-cp -r skills/handoff-pack ~/.claude/skills/
+cp -r skills/handoff-implement ~/.claude/skills/
 
 # Project only
-cp -r skills/handoff-pack .claude/skills/
+cp -r skills/handoff-implement .claude/skills/
 ```
 
 ### Other agents (skills CLI)
 
+For Copilot, Cursor and other agents that support Agent Skills:
+
 ```bash
 npx skills add SergVina/Handoff-pack-skill
 ```
+
+Or copy `skills/handoff-implement` into the skills directory your agent documents.
 
 The generated pack itself needs no installation: it is plain Markdown that any agent can read.
 
@@ -173,6 +237,15 @@ Then:
 2. Review the validation summary and approve it or correct it.
 3. Download the pack, unzip it at the root of your repository and paste the kickoff prompt from `handoff/README.md` into your agent.
 
+In the IDE, with `handoff-implement` installed, say things like:
+
+- "Start the handoff." / "Empieza con el traspaso."
+- "Next task." / "Haz la siguiente tarea."
+- "Implement T-03."
+- "Write the phase report." / "Escribe el informe de fase."
+
+Take each phase report back to the Claude chat and ask to update the pack. That keeps the pack the single source of truth.
+
 ## Design principles
 
 - **Zero silent assumptions.** Unknowns are asked, delegated with your approval, or explicitly marked as blocked. Never guessed.
@@ -182,6 +255,7 @@ Then:
 - **Executable tasks.** Each task fits in one agent session and has verifiable acceptance criteria and a concrete way to check them.
 - **Tool-agnostic output.** Plain Markdown, no HTML or images, diagrams in Mermaid or ASCII. Works with Claude Code, Copilot, Cursor and any agent that reads files.
 - **No invented facts.** Versions, endpoints and repository structure appear only when you or the repository provided them.
+- **One contract, two sides.** The writer and the reader of the pack follow the same versioned format, so a pack written in Spanish today is read correctly by an agent next month.
 
 ## How it compares
 
@@ -198,23 +272,43 @@ Handoff Pack focuses on a specific gap: **the bridge between a chat assistant an
 ```text
 handoff-pack/
 ├── .claude-plugin/
-│   └── marketplace.json         # Claude Code marketplace manifest
+│   └── marketplace.json         # Claude Code marketplace manifest (both skills)
 ├── .github/
 │   ├── ISSUE_TEMPLATE/          # Bug report and feature request templates
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── workflows/
-│       ├── release.yml          # Builds and attaches the ZIP on each release
-│       └── validate.yml         # Validates the skill package on every push and PR
+│       ├── checks.yml           # Format sync, validation and ZIP build on every push and PR
+│       └── release.yml          # Builds and attaches both ZIPs on each release
+├── spec/
+│   └── PACK-FORMAT.md           # Canonical pack format contract (format 1)
 ├── skills/
-│   └── handoff-pack/
-│       ├── SKILL.md             # Workflow and rules
+│   ├── handoff-pack/            # Chat side: interview, validate, write and update the pack
+│   │   ├── SKILL.md
+│   │   └── references/
+│   │       ├── pack-format.md   # Copy of spec/PACK-FORMAT.md
+│   │       ├── interview-checklist.md
+│   │       ├── templates.md
+│   │       ├── lite-mode.md
+│   │       ├── update-mode.md
+│   │       ├── feedback-prompt.md
+│   │       ├── agent-files.md
+│   │       ├── discovery-prompt.md
+│   │       ├── non-technical-users.md
+│   │       └── project-types/   # Lenses: frontend, api, data, migration, website, automation
+│   └── handoff-implement/       # IDE side: validate and execute the pack, report back
+│       ├── SKILL.md
 │       └── references/
-│           ├── interview-checklist.md
-│           ├── templates.md
-│           └── discovery-prompt.md
+│           ├── pack-format.md   # Copy of spec/PACK-FORMAT.md
+│           ├── integrity-checks.md
+│           ├── task-loop.md
+│           └── report-template.md
+├── evals/
+│   ├── handoff-pack/            # evals.json and trigger-evals.json
+│   └── handoff-implement/       # evals.json and trigger-evals.json
 ├── scripts/
-│   ├── build-zip.sh             # Builds dist/handoff-pack.zip for Claude uploads
-│   └── validate.sh              # Checks frontmatter, versions and references
+│   ├── build-zip.sh             # Builds dist/handoff-pack.zip and dist/handoff-implement.zip
+│   ├── check-format-sync.sh     # Fails if a skill's copy of the contract differs
+│   └── validate.sh              # Frontmatter, versions, cited references, JSON, evals paths
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
 └── LICENSE
@@ -222,10 +316,10 @@ handoff-pack/
 
 ## Roadmap
 
-- A worked example pack in `examples/` showing a full interview and its output.
-- Optional lightweight mode for small changes.
-- Pack update mode: revise an existing `handoff/` after new decisions without regenerating everything.
-- Evaluation set to test triggering and output quality across releases.
+- A worked example: a full interview, its pack, an implementation phase and the report going back.
+- Run the evaluation sets automatically on each release and publish the results.
+- More project lenses (mobile apps, browser extensions, games).
+- A pack linter that runs the `handoff-implement` integrity checks as a script, for CI in the user's repository.
 
 Ideas and feedback are welcome in [issues](../../issues).
 
