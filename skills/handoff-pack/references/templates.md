@@ -1,12 +1,12 @@
 # Handoff pack templates
 
-Skeleton of each file. Fill every section with content already validated by the user; if a section does not apply, write "Not applicable" and a one-line reason (so it is clear it was not forgotten).
+Skeleton of each file of the Full pack (Lite mode uses `lite-mode.md`; extra sections per kind of project live in the lenses in `project-types/`; for non-technical users add `00-START-HERE.md` from `non-technical-users.md`). Fill every section with content already validated by the user; if a section does not apply, write "Not applicable" and a one-line reason (so it is clear it was not forgotten).
 
 Write headings and prose in the user's language. Keep file names, IDs, status emojis, code identifiers, paths and commands unchanged.
 
 ## Contents
 
-1. `AGENTS.md`
+1. `AGENTS.md` (and `CLAUDE.md`, see `agent-files.md`)
 2. `handoff/README.md`
 3. `handoff/01-CONTEXT.md`
 4. `handoff/02-ARCHITECTURE.md`
@@ -14,7 +14,7 @@ Write headings and prose in the user's language. Keep file names, IDs, status em
 6. `handoff/04-ACTION-PLAN.md`
 7. `handoff/05-PENDING.md`
 
-Status legend, valid in every file: ✅ Confirmed (validated by the user or verified in the repo) · 🔶 Delegated to the agent (explicitly approved by the user, with limits; see 05-PENDING.md) · ❓ Pending (external information missing; see 05-PENDING.md). Source: `user` or `repo`. There is no "assumed" status.
+Status legend, valid in every file: ✅ Confirmed (validated by the user or verified in the repo) · 🔶 Delegated to the agent (explicitly approved by the user, with limits; see 05-PENDING.md) · ❓ Pending (external information missing; see 05-PENDING.md). Source: `user` (stated or chosen by the user), `summary` (assistant proposal approved only via the validation summary or writing delta; low-impact only) or `repo`. There is no "assumed" or "derived" status.
 
 ---
 
@@ -33,7 +33,10 @@ This project has a handoff pack in `handoff/`.
 4. If something marked ❓ blocks your task, ask before moving on. You may decide 🔶 items yourself, within the limits set in `handoff/05-PENDING.md`.
 5. When you finish a task, tick its checkbox and update the progress log in `04-ACTION-PLAN.md`.
 6. If you find something that contradicts these documents, say so and propose the fix; do not ignore it.
+7. At the end of each phase, or as soon as you are blocked, write a report as described in `handoff/README.md` ("Reporting back").
 ````
+
+If the team uses Claude Code, also generate `CLAUDE.md` with `@AGENTS.md` as its first line. Claude Code does not read `AGENTS.md` on its own. See `agent-files.md`, including what to do when these files already exist.
 
 ---
 
@@ -54,6 +57,8 @@ Reading order: 01 → 02 → 03 → 04 → 05. [one line per file saying what it
 - [Project rules: how to run tests, style, branches, commits, what not to touch. Existing mode: branch to work on, commit format and CI checks that must pass, taken from the repo]
 - [Behavior rules: ask on ❓, do not expand scope, one task at a time]
 - [Definition of "done": acceptance criteria met and verification run]
+- Check the current official documentation of every library before using it; do not rely on remembered APIs.
+- [New projects with versions "Not pinned": use the current stable version and record the version used in 02-ARCHITECTURE.md and the progress log]
 
 ## Kickoff prompt
 
@@ -75,6 +80,14 @@ execute T-01, and then implement it following its acceptance criteria.
 1. [T-01: what to do and why first]
 2. [T-02]
 3. [T-03]
+
+## Reporting back
+[Copy here, verbatim and in the user's language, the agent-side report instructions from `feedback-prompt.md` (Part A). Reports are saved in `handoff/reports/` and the user brings them back to the chat to update this pack.]
+
+## Pack history
+| Version | Date | Change |
+|---|---|---|
+| v1 | [YYYY-MM-DD] | Initial pack, validated by the user. |
 ````
 
 ---
@@ -111,7 +124,14 @@ execute T-01, and then implement it following its acceptance criteria.
 |---|---|
 
 ## Source material
-[Examples, links, texts or screenshots the user provided, copied or described. It is the source of truth when in doubt.]
+[Examples, links, texts or screenshots the user provided, copied or described. It is the source of truth when in doubt. If this pack replaces an earlier draft (for example a CLAUDE.md written in the conversation), say so here and state that the draft must not be used as a source.]
+
+## Statement inventory
+Everything the user said, and where it was recorded. It makes the coverage check auditable.
+
+| # | What the user said (verbatim or near-verbatim) | Recorded in |
+|---|---|---|
+| 1 | | D-01, RF-03 |
 ````
 
 ---
@@ -124,6 +144,8 @@ execute T-01, and then implement it following its acceptance criteria.
 ## Stack
 | Layer | Technology | Version | Status | Source |
 |---|---|---|---|---|
+
+[Version: from the repo in Existing projects. In New projects, the version the user pinned or "Not pinned" (the agent uses the current stable version and records it here).]
 
 ## Current state (Existing mode only)
 [Actual repo structure, modules, how it runs, tests, detected conventions. Everything with source `repo` or confirmed by the user.]
@@ -184,8 +206,8 @@ execute T-01, and then implement it following its acceptance criteria.
 |---|---|---|---|---|---|
 
 ## Edge cases and errors
-| ID | Situation | Expected behavior |
-|---|---|---|
+| ID | Situation | Expected behavior | Status | Source |
+|---|---|---|---|---|
 
 ## Out of scope for this version
 [What might be requested later but not now.]
