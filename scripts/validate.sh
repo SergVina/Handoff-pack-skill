@@ -4,7 +4,13 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-PY="$(command -v python3 || command -v python)"
+PY=""
+for candidate in python3 python; do
+  if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "import yaml" 2>/dev/null; then
+    PY="$candidate"; break
+  fi
+done
+[ -n "$PY" ] || { echo "Error: Python 3 with PyYAML is required (pip install pyyaml)" >&2; exit 1; }
 
 "$PY" - "$ROOT_DIR" <<'EOF'
 import glob, json, os, re, sys

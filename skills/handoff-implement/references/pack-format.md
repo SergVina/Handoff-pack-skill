@@ -316,7 +316,7 @@ Exactly these nine sections, in this order, as headings numbered `1.` to `9.`:
 8. **Proposed changes to the pack**: by ID (add, modify, supersede), with the reason.
 9. **Next steps**: the next tasks, in order.
 
-A section with nothing to report says so ("None") instead of being dropped. The agent cites IDs and file paths, does not edit `D`, `RF` or `RNF` items (it proposes changes in section 8), and may only tick task checkboxes and append to the progress log.
+A section with nothing to report says so ("None") instead of being dropped. The agent cites IDs and file paths, does not edit `D`, `RF` or `RNF` items (it proposes changes in section 8), and may only tick task checkboxes, append to the progress log and, where the stack says "Not pinned", record the version used.
 
 ## 11. Pack history and statement inventory
 
