@@ -7,7 +7,7 @@ The same rules apply as in creation: interview until closed, validation gate bef
 ## Procedure
 
 ### 1. Get the current pack
-Work from the real files, never from memory of a previous conversation. In a chat, ask the user to attach or paste the current `handoff/` (at least the files likely to change and `README.md`). In an agent with repository access, read them from disk.
+Work from the real files, never from memory of a previous conversation. In a chat, ask the user to attach or paste the current `handoff/` (at least the files likely to change and the entry file, `README.md` or `HANDOFF.md`). In an agent with repository access, read them from disk.
 
 ### 2. Identify the trigger
 What changed and where it comes from: an agent report (see `feedback-prompt.md`), a new decision by the user, a scope change, a resolved ❓. Capture its statements verbatim, as in Step 1 of creation.
@@ -42,7 +42,8 @@ The same safeguards as in creation apply: high-impact changes get their own ques
 - Edit only the affected files and sections. Do not rewrite or reformat unrelated content.
 - Keep checkboxes and the progress log; append a new log entry describing the update.
 - Mark superseded items in place, for example: `~~RF-04 ...~~ Superseded on [date] by RF-09`.
-- Bump the pack version in the "Pack history" table of `README.md` (v1, v2...) with date and a one-line summary.
+- Bump the pack version in the "Pack history" table of the entry file (`README.md` in Full, `HANDOFF.md` in Lite) with date and a one-line summary (v1, v2...). This is the pack's content version, not the `Pack format` line, which only changes with the format contract.
+- Keep the section and column order of the templates, so the agent can still locate everything by position and IDs (see `pack-format.md`).
 - Update the traceability table if requirements or tasks changed, and add new user statements to the statement inventory.
 
 ### 7. Verify and deliver

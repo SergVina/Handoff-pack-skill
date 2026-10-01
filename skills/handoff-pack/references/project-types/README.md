@@ -15,6 +15,7 @@ The files in this folder are **lenses**: optional sets of extra questions, pack 
 
 ## How to use them
 
+- Lens sections are added **after** the last template section of the file they go into, never between template sections: the agent reading the pack locates the template sections by their order (see `../pack-format.md`).
 - Load only the lenses that apply. Combine them freely (a booking website may use `website.md` and `api.md`).
 - If the project fits none of them (a mobile app, a game, a browser extension, a chatbot, a hardware project, a desktop tool...), **derive an equivalent lens yourself** from the domain, following the same three parts:
   1. **Extra questions**: what is specific to this kind of project and would break the result if guessed (for a mobile app: platforms, store publishing, offline use, push notifications, device permissions).

@@ -24,14 +24,15 @@ The agent files from `agent-files.md`, plus one file: `handoff/HANDOFF.md`. Crea
 
 ## Template: `handoff/HANDOFF.md`
 
-Write headings and prose in the user's language. Keep IDs, status emojis, paths and commands unchanged.
+Write headings and prose in the user's language. Keep IDs, status emojis, source values, paths and commands unchanged, and keep the `**Pack format:** 1` line as is. Keep the sections and table columns in the order shown: the agent locates them by position and IDs, not by heading text (see `pack-format.md`).
 
 ````markdown
 # [Change title]: handoff
 
+**Pack format:** 1
 **Summary:** [one line]
-**Mode:** Lite · **Project:** Existing | New · **Date:** [YYYY-MM-DD]
-**Status:** Validated by the user on [date]. [n 🔶 and n ❓, see "Pending"]
+**Mode:** Lite · **Project:** New | Existing · **Date:** [YYYY-MM-DD]
+**Pack status:** Validated by the user on [date]. [n 🔶 and n ❓, see "Pending"]
 
 ## Context
 [Why this change, for whom, what it must achieve. In the user's own words.]
@@ -43,28 +44,38 @@ Write headings and prose in the user's language. Keep IDs, status emojis, paths 
 ## Decisions
 | ID | Decision | Reason | Status | Source |
 |---|---|---|---|---|
+| D-01 | | | ✅ | user |
 
 ## Current state of the code
 [Only the parts relevant to this change: files, modules, conventions. Source `repo` or confirmed by the user.]
 
 ## Requirements
-| ID | Requirement | Acceptance criterion | Status |
-|---|---|---|---|
+| ID | Requirement | Acceptance criterion | Status | Source |
+|---|---|---|---|---|
+| RF-01 | | Given... when... then... | ✅ | user |
+
+[Use `RNF-xx` IDs in the same table for non-functional requirements, if any.]
 
 ## Edge cases and errors
 | ID | Situation | Expected behavior | Status | Source |
 |---|---|---|---|---|
+| E-01 | | | ✅ | user |
 
 ## Tasks
 - [ ] T-01 [short title]
 
 ### T-01. [Title]
 - **Covers:** RF-01
+- **Depends on:** none
 - **Files:** create `...`; modify `...` (what changes)
 - **Steps:** 1. ... 2. ...
 - **Acceptance criteria:** [checkable]
 - **How to verify:** `[command]` or [concrete action and expected result]
 - **Out of scope:** ...
+
+## Progress log
+| Date | Task | Status | Agent notes |
+|---|---|---|---|
 
 ## Rules for the agent
 - [Autonomy, commits, what never to do, definition of done]
@@ -75,7 +86,18 @@ Write headings and prose in the user's language. Keep IDs, status emojis, paths 
 |---|---|---|
 
 ## Pending
-[🔶 delegated decisions with limits, ❓ external pending items with owner and blocked tasks, or "None: everything was validated with the user".]
+[If there is nothing: "None: everything was validated with the user." Otherwise:]
+
+### Decisions delegated to the agent 🔶
+| ID | What the agent may decide | Limits (what it may not do) | When it must stop and ask | Approved by the user |
+|---|---|---|---|---|
+
+### External pending items ❓
+| ID | What is missing | Who resolves it | Tasks it blocks | Meanwhile |
+|---|---|---|---|---|
+
+### Resolved
+[When a pending item is resolved, move it here with the date and link the resulting D-xx.]
 
 ## Kickoff prompt
 ```
@@ -84,5 +106,10 @@ in 5 lines, list anything that blocks T-01 and, if nothing does, start T-01.
 ```
 
 ## Reporting back
-[Copy here, verbatim, the agent-side report instructions from `feedback-prompt.md`.]
+[Copy here, verbatim, the agent-side report instructions from `feedback-prompt.md`. Lite packs have a single phase: reports are `handoff/reports/phase-1-<YYYY-MM-DD>.md`.]
+
+## Pack history
+| Version | Date | Change |
+|---|---|---|
+| v1 | [YYYY-MM-DD] | Initial pack, validated by the user. |
 ````

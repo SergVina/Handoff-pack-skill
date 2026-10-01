@@ -57,7 +57,7 @@ Cover these in addition to the checklist areas, in plain language:
 Keep the technical files exactly as precise as for a developer: the agent needs them. Add a layer for the person:
 
 - **`handoff/00-START-HERE.md`**, written for the person, not the agent (template below). It becomes the first item in the reading order of `handoff/README.md`, marked as "for the person".
-- **Decisions with a "what this means for you" line** in `01-CONTEXT.md`.
+- **Decisions with a "what this means for you" column** in `01-CONTEXT.md`, added as the last column of the decisions table (extra columns always go after the template columns, so the agent can still read the table by position).
 - **Acceptance criteria they can check by hand** (open this page, click this button, you should see this), alongside any automated check.
 - **A visible first result**: the first task produces something they can open and try.
 - **Agent rules for working with a non-technical owner** in `handoff/README.md`:

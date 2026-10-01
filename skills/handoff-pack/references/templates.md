@@ -2,7 +2,7 @@
 
 Skeleton of each file of the Full pack (Lite mode uses `lite-mode.md`; extra sections per kind of project live in the lenses in `project-types/`; for non-technical users add `00-START-HERE.md` from `non-technical-users.md`). Fill every section with content already validated by the user; if a section does not apply, write "Not applicable" and a one-line reason (so it is clear it was not forgotten).
 
-Write headings and prose in the user's language. Keep file names, IDs, status emojis, code identifiers, paths and commands unchanged.
+Write headings and prose in the user's language. Keep file names, IDs, status emojis, source values, code identifiers, paths and commands unchanged, and keep the `**Pack format:** 1` line as is. Keep the sections in the order shown and the required columns in the order shown: the agent locates them by position and IDs, not by heading text (see `pack-format.md`). Extra sections (lenses) go after the last template section of the file; extra columns go after the template columns.
 
 ## Contents
 
@@ -45,8 +45,9 @@ If the team uses Claude Code, also generate `CLAUDE.md` with `@AGENTS.md` as its
 ````markdown
 # [Project name]: handoff pack
 
+**Pack format:** 1
 **One-line summary:** [what it is and who it is for]
-**Mode:** New | Existing
+**Mode:** Full · **Project:** New | Existing
 **Date:** [YYYY-MM-DD]
 **Pack status:** Validated by the user on [date]. [n delegated decisions 🔶 and n pending items ❓; see 05-PENDING.md]
 
@@ -113,6 +114,7 @@ execute T-01, and then implement it following its acceptance criteria.
 ## Constraints
 | ID | Constraint | Type (technical, legal, deadline, budget, platform) | Status | Source |
 |---|---|---|---|---|
+| C-01 | | | ✅ | user |
 
 ## Decisions made
 | ID | Decision | Reason | Discarded alternatives | Status | Source |
@@ -208,6 +210,7 @@ Everything the user said, and where it was recorded. It makes the coverage check
 ## Edge cases and errors
 | ID | Situation | Expected behavior | Status | Source |
 |---|---|---|---|---|
+| E-01 | | | ✅ | user |
 
 ## Out of scope for this version
 [What might be requested later but not now.]
@@ -281,6 +284,7 @@ It only contains what the user explicitly approved leaving this way. If there is
 ## Known risks
 | ID | Risk | Likelihood | Impact | Agreed mitigation |
 |---|---|---|---|---|
+| R-01 | | | | |
 
 ## Resolved
 [When a pending item is resolved, move it here with the date and link the resulting D-xx.]

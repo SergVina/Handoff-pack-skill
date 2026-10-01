@@ -19,7 +19,7 @@ That is why this skill leaves **no assumptions, silent or explicit**. If somethi
 
 ## Language and audience
 
-Talk to the user in their language, and write the pack in that language too (prose and headings). Keep IDs, file names, status emojis, code identifiers, paths and commands exactly as defined here or as they appear in the project.
+Talk to the user in their language, and write the pack in that language too (prose and headings). Keep IDs, file names, status emojis, source values (`user`, `summary`, `repo`), code identifiers, paths and commands exactly as defined here or as they appear in the project, and keep the `**Pack format:** 1` line as is. The reader of the pack finds sections by file, IDs and position, not by heading text, so the order of the template sections must not change (see `references/pack-format.md`).
 
 The skill serves two kinds of people, and you adapt to each:
 
@@ -136,6 +136,8 @@ Adapt delivery to the environment where the skill is running:
 
 In both cases, say which earlier drafts the pack replaces (if any), remind the user of anything delegated (🔶) or pending (❓), and that the pack includes a progress-report prompt (`references/feedback-prompt.md`) so they can bring the agent's results back to the chat and update the pack.
 
+If the user has the `handoff-implement` skill installed in their IDE agent, the agent will use it to execute the pack: integrity checks, an understanding gate before coding, one task at a time and phase reports in the exact format Update mode expects. Without it the pack works just the same, because `AGENTS.md` carries the basic working rules; mention this in one line.
+
 Do not repeat the content of the files in the chat.
 
 ## Pack structure (Full mode)
@@ -159,7 +161,7 @@ For very small Full projects you may merge `01` and `02`; if it is smaller than 
 
 **Explicit over elegant.** Write for a very capable reader who knows nothing about the project and cannot ask. Avoid "etc.", "as discussed", "the usual" or "similar to X" without saying what X is.
 
-**Stable IDs and cross-references.** `RF-01` functional requirement, `RNF-01` non-functional, `D-01` decision, `T-01` task, `DL-01` delegated decision, `Q-01` pending item. Tasks cite the requirements they cover. IDs are never reused or renumbered after the OK, including in later updates.
+**Stable IDs and cross-references.** `O-01` goal, `C-01` constraint, `D-01` decision, `RF-01` functional requirement, `RNF-01` non-functional, `E-01` edge case, `T-01` task, `DL-01` delegated decision, `Q-01` pending item, `R-01` risk. Tasks cite the requirements they cover. IDs are never reused or renumbered after the OK, including in later updates.
 
 **Status on what matters.** ✅ Confirmed (validated by the user or verified in the repo) · 🔶 Delegated to the agent (explicitly approved by the user, with limits) · ❓ Pending (external information missing; state who resolves it and what it blocks). There is no "assumed" or "derived" status: anything derived goes through the writing delta.
 
@@ -194,12 +196,14 @@ Check each point before delivering:
 11. **Closing sweep**: every area marked not applicable was confirmed by the user in the sweep.
 12. **Honest sources**: proposals approved only in the summary or delta carry source `summary`.
 13. **Right for the reader**: for non-technical users, `00-START-HERE.md` exists, every technical term is in the glossary, and the first tasks have checks they can do by hand.
+14. **Pack format**: the entry file declares `**Pack format:** 1`, every template section is present in template order (or says "Not applicable" with a reason), required columns keep their order, and IDs use the prefixes of `references/pack-format.md`.
 
 ## References
 
 Read only what the current situation needs:
 
 - `references/interview-checklist.md`: the 15 interview areas for Full mode. Read at the start of Step 3.
+- `references/pack-format.md`: the pack format contract (format 1): files, IDs, statuses, sources, required sections and columns, task card and report. Templates follow it; read it when in doubt about structure.
 - `references/templates.md`: skeleton of every file in the Full pack. Read before writing.
 - `references/lite-mode.md`: reduced areas and the single-file template for Lite mode.
 - `references/update-mode.md`: procedure to update an existing pack.

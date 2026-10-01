@@ -6,12 +6,14 @@ It has two parts: the instructions that travel inside the pack for the agent, an
 
 ## Part A. Agent-side instructions (included in the pack)
 
-Copy this block verbatim into the "Reporting back" section of `handoff/README.md` (Full) or `handoff/HANDOFF.md` (Lite), translated into the user's language. Keep the section names, so reports are easy to process.
+Copy this block verbatim into the "Reporting back" section of `handoff/README.md` (Full) or `handoff/HANDOFF.md` (Lite), translated into the user's language. Keep the nine sections, their order and their numbers `1.` to `9.`: the report format is fixed by section 10 of `pack-format.md`, and Update mode reads reports section by section. If the user's IDE agent has the `handoff-implement` skill, it already writes reports in this format; the block is still included so the pack works with any agent.
 
 ````markdown
 At the end of each phase of the action plan, or as soon as you are blocked, write a
-report in `handoff/reports/phase-<N>-<YYYY-MM-DD>.md` with exactly these sections.
-Be factual and cite IDs (T-xx, RF-xx, D-xx, DL-xx, Q-xx) and file paths.
+report in `handoff/reports/phase-<N>-<YYYY-MM-DD>.md` with exactly these sections,
+as headings numbered 1 to 9. Never overwrite a report: if the file exists, add -2,
+-3... before .md. A section with nothing to report says "None".
+Be factual and cite IDs (T-xx, RF-xx, RNF-xx, E-xx, D-xx, DL-xx, Q-xx) and file paths.
 
 1. Summary: what was done in this phase, in 3 to 5 lines.
 2. Completed tasks: each T-xx with the verification you ran and its result.
@@ -26,7 +28,8 @@ Be factual and cite IDs (T-xx, RF-xx, D-xx, DL-xx, Q-xx) and file paths.
 9. Next steps: the next tasks you would do, in order.
 
 Do not edit D-xx decisions or RF/RNF requirements yourself: propose the change in
-section 8. You may tick task checkboxes and append to the progress log.
+section 8. You may tick task checkboxes, append to the progress log and, where the
+stack says "Not pinned", record the version you used.
 ````
 
 ## Part B. Standalone prompt (for packs created without Part A)
