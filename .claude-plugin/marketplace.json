@@ -1,0 +1,21 @@
+{
+  "name": "handoff-pack",
+  "owner": {
+    "name": "SergVina"
+  },
+  "metadata": {
+    "description": "Turn ideas or existing projects into validated, agent-ready Markdown handoff packs for Claude Code, GitHub Copilot, Cursor and other IDE agents.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "handoff-pack",
+      "description": "Interviews you until every important detail is settled, asks for explicit approval, then writes a Markdown handoff pack (context, architecture, requirements, action plan, pending items) for any coding agent.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/handoff-pack"
+      ]
+    }
+  ]
+}
