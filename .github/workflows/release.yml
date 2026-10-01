@@ -13,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build skill ZIP
+      - name: Build skill ZIPs
         run: ./scripts/build-zip.sh
 
-      - name: Attach ZIP to the release
+      - name: Attach ZIPs to the release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ github.event.release.tag_name }}" dist/handoff-pack.zip --clobber
+        run: gh release upload "${{ github.event.release.tag_name }}" dist/handoff-pack.zip dist/handoff-implement.zip --clobber
