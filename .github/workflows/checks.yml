@@ -1,0 +1,34 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Pack format copies are in sync
+        run: ./scripts/check-format-sync.sh
+
+      - name: Validate skills, manifest and evals
+        run: ./scripts/validate.sh
+
+      - name: Build skill ZIPs
+        run: ./scripts/build-zip.sh
+
+      - name: Check ZIP layout
+        run: |
+          for skill in handoff-pack handoff-implement; do
+            unzip -l "dist/$skill.zip" | grep -q " $skill/SKILL.md$" \
+              || { echo "dist/$skill.zip has no $skill/SKILL.md at its root" >&2; exit 1; }
+          done
