@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Turn ideas or existing projects into validated, agent-ready Markdown handoff packs for Claude Code, GitHub Copilot, Cursor and other IDE agents.",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {

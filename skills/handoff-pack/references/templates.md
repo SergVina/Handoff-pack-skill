@@ -51,7 +51,7 @@ This project has a handoff pack in `handoff/`.
 Reading order: 01 → 02 → 03 → 04 → 05. [one line per file saying what it contains]
 
 ## Working rules for the agent
-- [Project rules: how to run tests, style, branches, commits, what not to touch]
+- [Project rules: how to run tests, style, branches, commits, what not to touch. Existing mode: branch to work on, commit format and CI checks that must pass, taken from the repo]
 - [Behavior rules: ask on ❓, do not expand scope, one task at a time]
 - [Definition of "done": acceptance criteria met and verification run]
 
@@ -128,6 +128,19 @@ execute T-01, and then implement it following its acceptance criteria.
 ## Current state (Existing mode only)
 [Actual repo structure, modules, how it runs, tests, detected conventions. Everything with source `repo` or confirmed by the user.]
 
+## Reference feature (Existing mode, when adding something new)
+[The existing feature most similar to the new one, confirmed by the user as the pattern to imitate. Layer, path and role in the pattern, plus a few lines on the pattern itself. If none exists, say so.]
+
+| Layer | Path | Role in the pattern |
+|---|---|---|
+
+## Reusable code (Existing mode)
+| What | Path | Signature or usage | Used by task |
+|---|---|---|---|
+
+## Checklist for adding this kind of change (Existing mode)
+[Ordered places normally touched (routing, auth, migration, types, tests, i18n, docs...). Each item points to the task that covers it or is marked "not needed" with the reason.]
+
 ## Target state
 [How the system should end up.]
 
@@ -202,6 +215,7 @@ execute T-01, and then implement it following its acceptance criteria.
 - **Goal:** [what must exist when it is done]
 - **Required context:** [documents and sections to read; applicable D-xx decisions]
 - **Files:** create `path/a.ext`; modify `path/b.ext` (what changes)
+- **Pattern to follow:** [Existing mode: the file(s) of the reference feature to imitate and the reusable code to use; "none" in New mode]
 - **Steps:**
   1. ...
   2. ...

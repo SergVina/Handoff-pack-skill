@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue)](https://agentskills.io)
-![Version](https://img.shields.io/badge/version-1.0.0-informational)
+![Version](https://img.shields.io/badge/version-1.1.0-informational)
 
 Handoff Pack is an [Agent Skill](https://agentskills.io) that turns an idea, a need, or an existing project into a **validated, agent-ready documentation pack**. It interviews you until every important detail is settled, asks for your explicit approval, and only then writes a set of Markdown files that any coding agent in your IDE (Claude Code, GitHub Copilot agent mode, Cursor and others) can read and execute from step one.
 
@@ -66,7 +66,7 @@ Handoff Pack closes that gap with a structured, verified handoff.
 | Scenario | What Handoff Pack does |
 |---|---|
 | **New project from an idea** | Interviews you about goals, scope, data, edge cases and constraints, then produces context, architecture, requirements and a phased action plan. |
-| **New feature in an existing repo** | Gives you a read-only discovery prompt to run in your IDE agent, uses its report as verified facts, and plans the feature around the real codebase. |
+| **New feature in an existing repo** | Gives you a read-only discovery prompt to run in your IDE agent, uses its report as verified facts (including the closest existing feature to imitate and the code to reuse), and plans the feature around the real codebase. |
 | **Refactor or migration** | Captures what must not change, compatibility constraints and untouchable areas, and splits the work into small, verifiable tasks. |
 | **Complex bug or incident fix** | Records context, reproduction steps, expected behavior and verification commands so the agent does not "fix" the wrong thing. |
 | **Onboarding an agent to a legacy project** | Documents conventions, structure and agent rules in a pack the agent reads automatically. |

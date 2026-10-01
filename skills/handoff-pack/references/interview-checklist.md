@@ -85,6 +85,9 @@ The example questions are not a script: they show the expected depth. Adapt them
 - Repo conventions to follow and known debt that should **not** be fixed now.
 - Branches, commits, review: how changes get integrated.
 - Which tests exist today and whether they pass; any contradiction between what the user said and what the repo shows.
+- Which existing feature is the right one to imitate for the new one (if the repo mixes styles, which is the current one), and which existing code must be reused.
+- Whether the new feature may touch shared code (models, utilities, config) or must stay isolated, and whether it goes behind a feature flag.
+- Uncommitted changes or work in progress in the repo that the agent must not disturb.
 
 ## 13. Priorities, phases and size
 - What is essential, what is desirable and what can wait.

@@ -17,6 +17,10 @@ only their names.
 
 Focus: [describe in one line what the user wants to do: new feature, refactor, migration...]
 
+Scope: if the repository is large (a monorepo, many modules), do not describe all of it.
+Give sections 1 to 9 at a high level, and go deep only on the modules that the Focus
+touches or depends on. Say which modules you left out.
+
 Give me, in Markdown and with these sections:
 
 1. Summary: what the project does, in 5 lines at most.
@@ -33,9 +37,21 @@ Give me, in Markdown and with these sections:
 9. Tests: framework, location, approximate coverage, whether they pass or fail right now.
 10. Areas related to the focus: files and modules that would need to change or would
     be affected, with exact paths.
-11. Visible debt and risks: dead code, TODOs, duplication, outdated dependencies,
-    fragile or untested parts.
-12. What I could not verify.
+11. Reference feature: the existing feature MOST SIMILAR to the Focus (same kind of
+    route, screen, entity, job or integration). List every file it spans, layer by layer
+    (route/controller, service, model/migration, UI, tests, docs, config), and summarize
+    in a few lines the pattern it follows. If nothing similar exists, say so.
+12. Reusable code: existing helpers, components, services, hooks, validators or utilities
+    that the Focus could reuse instead of duplicating, with exact paths and signatures.
+13. Checklist for adding something of this kind: from the reference feature, the ordered
+    list of places that are normally touched (for example: route registration, permission
+    or auth rules, migration, types, tests, i18n strings, docs, feature flags).
+14. Git and integration: current branch, uncommitted changes (list only, do not touch
+    them), branch and commit naming seen in the history, PR template, and the CI checks
+    that must pass (workflow files).
+15. Visible debt and risks: dead code, TODOs, duplication, outdated dependencies,
+    fragile or untested parts, especially around the area of the Focus.
+16. What I could not verify.
 
 Cite exact file paths for every statement.
 ````
@@ -45,4 +61,8 @@ Cite exact file paths for every statement.
 - Treat every statement with a file path as a verified fact (source `repo`) and use it in `02-ARCHITECTURE.md` under "Current state".
 - Anything marked "NOT VERIFIED" is not taken as true: ask the user during the interview or ask them to have the agent check it. It only goes to `05-PENDING.md` if it remains unresolved and the user agrees to leave it that way.
 - Section 10 feeds the file lists of the plan's tasks directly.
+- Section 11 becomes "Reference feature" in `02-ARCHITECTURE.md`, and each task that creates something new cites it as the pattern to follow.
+- Section 12 becomes "Reusable code" in `02-ARCHITECTURE.md`; tasks must reuse it instead of creating duplicates.
+- Section 13 becomes "Checklist for adding this kind of change" in `02-ARCHITECTURE.md`; every item must be covered by some task or confirmed as not needed.
+- Section 14 feeds the working rules in `handoff/README.md` (branches, commits, checks that must pass) and the "How to verify" of the tasks. Uncommitted changes the user did not mention go to the interview.
 - If the report contradicts what the user said in the chat, do not pick silently: take it to the interview and let the user decide which is correct.

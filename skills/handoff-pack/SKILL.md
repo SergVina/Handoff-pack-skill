@@ -4,7 +4,7 @@ description: Interviews the user until every important detail is settled and, on
 license: MIT
 compatibility: Designed for Claude chats (web and desktop); also works in Claude Code and other Agent Skills compatible agents. The generated pack is tool-agnostic Markdown for Claude Code, GitHub Copilot, Cursor and similar agents.
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Handoff Pack
@@ -45,9 +45,11 @@ You cannot see the user's repository from a chat, and you must not invent its st
 2. If not, offer the prompt in `references/discovery-prompt.md`. The user pastes it into their IDE agent, which can see the repo, and brings back the report.
 3. If the user would rather not, continue, but every fact about the existing code has to go through the interview: you ask, you do not assume.
 
-Anything that comes from real code has source `repo`. If the report contradicts what the user said, do not pick silently: take it to the interview.
+Anything that comes from real code has source `repo`. Confirm with the user that the reference feature is the right one to imitate: if the repo has several styles, they decide which is the current one. If the report contradicts what the user said, do not pick silently: take it to the interview.
 
 If you are running inside an agent that can read the repository (Claude Code, Copilot, Cursor...), inspect it yourself following the same discovery prompt, read-only.
+
+**New feature in an existing repo.** Discovery must find more than the structure: the *reference feature* (the most similar one already implemented, layer by layer), the *reusable code*, and the *checklist of places touched* when adding something of that kind. These are what let the plan imitate how this repo does things instead of inventing a new style. In a large repo, ask the user (or infer from the feature) which modules matter and limit the deep inspection to them, stating what was left out.
 
 ### Step 3. Interview until closed
 
