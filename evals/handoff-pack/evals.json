@@ -1,0 +1,47 @@
+{
+  "skill_name": "handoff-pack",
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-new-project-interview-first",
+      "prompt": "I want an app for my physiotherapy clinic so patients can book appointments online. Prepare everything so the AI in VS Code can build it.",
+      "files": [],
+      "expected_output": "Detects a new project and a non-technical user, proposes Full mode and starts the interview with 1 to 3 plain-language questions. Writes no files.",
+      "expectations": [
+        "Does not write any pack file in this turn",
+        "Asks between 1 and 3 questions",
+        "Uses plain language without unexplained technical terms",
+        "Proposes a mode (Full) with a one-line reason"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "lite-pack-format-header",
+      "prompt": "Small change in my existing Flask app: add a /health endpoint that returns {\"status\": \"ok\"} with HTTP 200, no auth, covered by a pytest test, using the existing blueprint in app/routes.py. I use Claude Code. That's everything; you can skip further questions, show me the summary and then generate the files once I say OK. OK in advance.",
+      "files": [],
+      "expected_output": "Uses Lite mode, still shows a validation summary, and when writing produces handoff/HANDOFF.md following lite-mode.md with the **Pack format:** 1 line, template order, ID prefixes from pack-format.md and a pack history, plus AGENTS.md and CLAUDE.md.",
+      "expectations": [
+        "Shows a validation summary before writing files",
+        "handoff/HANDOFF.md contains the literal line **Pack format:** 1",
+        "The header uses Mode Lite and Project Existing",
+        "Requirements have a Source column and edge cases use E-xx IDs",
+        "The file ends with a Pack history table with v1",
+        "CLAUDE.md has @AGENTS.md as its first line",
+        "Delivery mentions that handoff-implement, if installed in the IDE, will execute the pack, and that the pack works without it"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "update-from-phase-report",
+      "prompt": "Here is the report the agent wrote in handoff/reports/phase-1-2026-09-03.md. Section 4 says it printed overdue tasks in red, not delegated. Update the pack.",
+      "files": [],
+      "expected_output": "Enters Update mode, asks for the current pack files, asks the user to confirm or reject the non-delegated decision, and shows a change summary for OK before editing.",
+      "expectations": [
+        "Identifies Update mode",
+        "Asks for the current pack files instead of working from memory",
+        "Asks the user to confirm or reject the non-delegated decision before recording it as a D-xx",
+        "Does not edit any file before an explicit OK on a change summary"
+      ]
+    }
+  ]
+}

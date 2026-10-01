@@ -1,0 +1,86 @@
+[
+  {
+    "query": "Start the handoff",
+    "should_trigger": true
+  },
+  {
+    "query": "Read the handoff pack in handoff/ and tell me what you're going to build",
+    "should_trigger": true
+  },
+  {
+    "query": "implement T-03 from the plan",
+    "should_trigger": true
+  },
+  {
+    "query": "continue with the plan, next task",
+    "should_trigger": true
+  },
+  {
+    "query": "write the phase report for phase 2",
+    "should_trigger": true
+  },
+  {
+    "query": "what's blocked in the handoff right now?",
+    "should_trigger": true
+  },
+  {
+    "query": "The repo has handoff/HANDOFF.md, go ahead and build it",
+    "should_trigger": true
+  },
+  {
+    "query": "empieza con el traspaso",
+    "should_trigger": true
+  },
+  {
+    "query": "sigue con el plan del paquete de traspaso",
+    "should_trigger": true
+  },
+  {
+    "query": "haz la siguiente tarea",
+    "should_trigger": true
+  },
+  {
+    "query": "escribe el informe de fase y dime qué llevo al chat",
+    "should_trigger": true
+  },
+  {
+    "query": "I have an idea for an app, help me prepare the documentation for the agent",
+    "should_trigger": false
+  },
+  {
+    "query": "Here is the agent's phase report, update the handoff pack",
+    "should_trigger": false
+  },
+  {
+    "query": "prepárame un paquete de traspaso para mi proyecto",
+    "should_trigger": false
+  },
+  {
+    "query": "Write a CLAUDE.md for this repository",
+    "should_trigger": false
+  },
+  {
+    "query": "Fix the failing test in tests/test_store.py",
+    "should_trigger": false
+  },
+  {
+    "query": "Explain what a handoff is in agile teams",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a project plan with phases and tasks for a new website",
+    "should_trigger": false
+  },
+  {
+    "query": "escribe un informe de ventas del último trimestre",
+    "should_trigger": false
+  },
+  {
+    "query": "haz un handoff de diseño de este Figma para desarrollo",
+    "should_trigger": false
+  },
+  {
+    "query": "next song in the playlist",
+    "should_trigger": false
+  }
+]
