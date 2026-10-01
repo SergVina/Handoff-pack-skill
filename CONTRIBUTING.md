@@ -22,6 +22,14 @@ Thanks for your interest in improving Handoff Pack.
 - Test your change by running the skill on at least one new project and one existing project, and describe the result in the pull request.
 - Update `CHANGELOG.md` and bump the version in `SKILL.md` and `marketplace.json` when the behavior changes.
 
+## Validating
+
+```bash
+./scripts/validate.sh
+```
+
+Checks the frontmatter, the 500-line limit, that the version matches across files and that every cited reference exists. CI runs it on every push and pull request.
+
 ## Building the ZIP locally
 
 ```bash

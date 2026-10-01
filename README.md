@@ -199,8 +199,12 @@ Handoff Pack focuses on a specific gap: **the bridge between a chat assistant an
 handoff-pack/
 ├── .claude-plugin/
 │   └── marketplace.json         # Claude Code marketplace manifest
-├── .github/workflows/
-│   └── release.yml              # Builds and attaches the ZIP on each release
+├── .github/
+│   ├── ISSUE_TEMPLATE/          # Bug report and feature request templates
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/
+│       ├── release.yml          # Builds and attaches the ZIP on each release
+│       └── validate.yml         # Validates the skill package on every push and PR
 ├── skills/
 │   └── handoff-pack/
 │       ├── SKILL.md             # Workflow and rules
@@ -209,7 +213,8 @@ handoff-pack/
 │           ├── templates.md
 │           └── discovery-prompt.md
 ├── scripts/
-│   └── build-zip.sh             # Builds dist/handoff-pack.zip for Claude uploads
+│   ├── build-zip.sh             # Builds dist/handoff-pack.zip for Claude uploads
+│   └── validate.sh              # Checks frontmatter, versions and references
 ├── CHANGELOG.md
 ├── CONTRIBUTING.md
 └── LICENSE
