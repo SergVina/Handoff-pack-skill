@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.8] - 2026-10-02
+
+Reliability fixes from the run that reopened a finished task (T-10 adjusted to a decision the user delegated), which the skill had no flow for.
+
+### Changed
+- `handoff-implement`: a task reopened by the pack (empty checkbox, an earlier "done" line, a pack history row explaining why) is expected, not an inconsistency. The criteria already ticked are kept and only what changed is redone; a new log line is added instead of editing the old one; if the phase already has a report that the rework makes untrue, a new one takes the next suffix. A test that fixes the behavior the pack just changed is updated and declared as a deviation.
+- `handoff-implement`, check 12: a pending item cited in a card whose own row says it blocks no task is not a blocker; the "Tasks it blocks" column prevails over a citation, and the status says so in one line.
+- `handoff-implement`: the mini-plan says how a background server will be stopped and that it may not be possible (the child process can outlive the tool's "stop"); browser scripts stay short and the state is polled in separate calls (about 45 seconds were observed as the limit); fixtures are fed to the browser through a temporary file that is deleted afterwards, checking `git status`; when the current branch is a pack-update branch, the base of the task branch is stated.
+
+### Added
+- Two evals for `handoff-implement`: a task reopened by the pack (24) and a cited pending item that blocks nothing (25).
+
 ## [1.2.7] - 2026-10-02
 
 First run of `handoff-pack` in Update mode inside an agent with repository access, closing the loop after phase 3. It protected the pack well (it refused to turn unconfirmed decisions into `D-xx` with source `user`, caught that D-17 did not say what the report claimed, and rejected proposals that would add scope); its feedback showed what Update mode did not say.

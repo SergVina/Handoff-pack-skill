@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-compatible-blue)](https://agentskills.io)
-![Version](https://img.shields.io/badge/version-1.2.7-informational)
+![Version](https://img.shields.io/badge/version-1.2.8-informational)
 
 Handoff Pack is a pair of [Agent Skills](https://agentskills.io) that carry a project from the chat where you plan it to the IDE where an agent builds it, and back:
 
