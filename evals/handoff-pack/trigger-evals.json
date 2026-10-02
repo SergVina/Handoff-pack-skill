@@ -1,0 +1,42 @@
+[
+  {
+    "query": "prepare the docs for the agent so it can build my idea",
+    "should_trigger": true
+  },
+  {
+    "query": "I need a detailed action plan and AGENTS.md for Copilot",
+    "should_trigger": true
+  },
+  {
+    "query": "prepárame la documentación para el agente, que no se pierda nada",
+    "should_trigger": true
+  },
+  {
+    "query": "quiero que la IA me programe mi idea de tienda online",
+    "should_trigger": true
+  },
+  {
+    "query": "here's the phase report from Claude Code, update the handoff pack",
+    "should_trigger": true
+  },
+  {
+    "query": "hazme un traspaso de este proyecto para Cursor",
+    "should_trigger": true
+  },
+  {
+    "query": "start the handoff and implement T-01",
+    "should_trigger": false
+  },
+  {
+    "query": "sigue con el plan, haz la siguiente tarea",
+    "should_trigger": false
+  },
+  {
+    "query": "fix this TypeError in my React component",
+    "should_trigger": false
+  },
+  {
+    "query": "write a blog post about remote work",
+    "should_trigger": false
+  }
+]

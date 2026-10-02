@@ -4,17 +4,18 @@
     "name": "SergVina"
   },
   "metadata": {
-    "description": "Turn ideas or existing projects into validated, agent-ready Markdown handoff packs for Claude Code, GitHub Copilot, Cursor and other IDE agents.",
-    "version": "1.1.0"
+    "description": "Two Agent Skills that carry a project from the chat to the IDE and back: handoff-pack turns ideas or existing projects into validated, agent-ready Markdown handoff packs; handoff-implement executes them in Claude Code, GitHub Copilot, Cursor and other IDE agents.",
+    "version": "1.2.0"
   },
   "plugins": [
     {
       "name": "handoff-pack",
-      "description": "Interviews you until every important detail is settled, asks for explicit approval, then writes a Markdown handoff pack (context, architecture, requirements, action plan, pending items) for any coding agent.",
+      "description": "handoff-pack interviews you until every important detail is settled, asks for explicit approval, then writes a Markdown handoff pack (context, architecture, requirements, action plan, pending items). handoff-implement reads that pack in the IDE, checks its integrity, confirms its understanding with you, implements one task at a time within the agreed limits and writes phase reports to update the pack.",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/handoff-pack"
+        "./skills/handoff-pack",
+        "./skills/handoff-implement"
       ]
     }
   ]

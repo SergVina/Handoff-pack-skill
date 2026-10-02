@@ -1,6 +1,6 @@
 # Interview checklist
 
-Map of the areas Step 3 must cover. For each one, the result is *covered* (with the user's answer) or *not applicable* confirmed by them. Keep track internally and do not ask what the user already said or what the repo already shows.
+Map of the areas Step 3 must cover in Full mode (Lite mode uses a subset, see `lite-mode.md`; lenses in `project-types/` add extra questions; for non-technical users, ask in plain language as described in `non-technical-users.md`). For each one, the result is *covered* (with the user's answer) or *not applicable* confirmed by them. Keep track internally and do not ask what the user already said or what the repo already shows.
 
 The example questions are not a script: they show the expected depth. Adapt them to the project, ask them in the user's language and skip the obvious ones.
 
@@ -90,7 +90,7 @@ The example questions are not a script: they show the expected depth. Adapt them
 - Uncommitted changes or work in progress in the repo that the agent must not disturb.
 
 ## 13. Priorities, phases and size
-- What is essential, what is desirable and what can wait.
+- What is essential, what is desirable and what can wait, down to the priority (Must/Should/Could) of each requirement, so the pack never has to guess it.
 - What should work first so it can be validated early.
 - Real deadlines or milestones, if any.
 
@@ -103,3 +103,4 @@ The example questions are not a script: they show the expected depth. Adapt them
 - Whether it should commit, create branches, run install commands or touch configuration files.
 - What it must never do (delete data, change dependencies without notice, expand the scope).
 - Where and how it should record progress.
+- Which coding agents the team uses (Claude Code, Copilot, Cursor, others), and whether the repo already has `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` or Cursor rules. This decides the agent files (see `agent-files.md`).
