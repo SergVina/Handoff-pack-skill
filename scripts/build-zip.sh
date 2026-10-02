@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Builds one ZIP per skill in dist/, ready to upload to Claude (web or desktop):
-# dist/handoff-pack.zip and dist/handoff-implement.zip.
+# dist/handoff-pack-<version>.zip and dist/handoff-implement-<version>.zip, where
+# <version> is the repository version from .claude-plugin/marketplace.json.
 # Each ZIP root must contain a single folder whose name matches the skill name,
 # with SKILL.md directly inside it.
 set -euo pipefail
@@ -9,6 +10,9 @@ SKILLS=(handoff-pack handoff-implement)
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DIST_DIR="$ROOT_DIR/dist"
 
+VERSION="$(sed -n 's/.*"version": *"\([^"]*\).*/\1/p' "$ROOT_DIR/.claude-plugin/marketplace.json" | head -1)"
+[ -n "$VERSION" ] || { echo "Error: version not found in marketplace.json" >&2; exit 1; }
+
 mkdir -p "$DIST_DIR"
 
 for skill in "${SKILLS[@]}"; do
@@ -16,8 +20,8 @@ for skill in "${SKILLS[@]}"; do
     echo "Error: skills/$skill/SKILL.md not found" >&2
     exit 1
   fi
-  out="$DIST_DIR/$skill.zip"
-  rm -f "$out"
+  out="$DIST_DIR/$skill-$VERSION.zip"
+  rm -f "$DIST_DIR/$skill"-*.zip
   if command -v zip >/dev/null 2>&1; then
     (cd "$ROOT_DIR/skills" && zip -rq "$out" "$skill" -x "*.DS_Store")
   else

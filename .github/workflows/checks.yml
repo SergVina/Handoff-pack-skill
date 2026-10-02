@@ -29,6 +29,7 @@ jobs:
       - name: Check ZIP layout
         run: |
           for skill in handoff-pack handoff-implement; do
-            unzip -l "dist/$skill.zip" | grep -q " $skill/SKILL.md$" \
-              || { echo "dist/$skill.zip has no $skill/SKILL.md at its root" >&2; exit 1; }
+            zip=$(ls dist/$skill-*.zip)
+            unzip -l "$zip" | grep -q " $skill/SKILL.md$" \
+              || { echo "$zip has no $skill/SKILL.md at its root" >&2; exit 1; }
           done

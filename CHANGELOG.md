@@ -20,7 +20,7 @@ and this project follows [Semantic Versioning](https://semver.org/).
 - Report instructions fix the nine numbered sections, never overwrite an existing report, and say "None" instead of dropping a section.
 - Lens sections and extra columns go after the template ones, so agents can locate sections by position.
 - `handoff-pack` delivery mentions the optional `handoff-implement` skill; verification checks the pack format.
-- `scripts/build-zip.sh` builds one ZIP per skill; the release attaches both. The marketplace plugin lists both skills.
+- `scripts/build-zip.sh` builds one ZIP per skill, named with the repository version (`handoff-pack-<version>.zip`, `handoff-implement-<version>.zip`); the release attaches both. The marketplace plugin lists both skills.
 - `scripts/validate.sh` checks every skill (name, description length, YAML frontmatter, line count, cited references), version consistency, JSON validity and old evals paths. `checks.yml` replaces `validate.yml`.
 
 ## [1.1.0] - 2026-10-01

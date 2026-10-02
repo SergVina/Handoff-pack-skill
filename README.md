@@ -179,11 +179,11 @@ What goes where:
 | `handoff-pack` | Claude (web or desktop), where you plan | Yes: it creates and updates the pack |
 | `handoff-implement` | Your IDE agent, where the code is written | Optional but recommended; without it the pack still works through `AGENTS.md` |
 
-Each release has one ZIP per skill: `handoff-pack.zip` and `handoff-implement.zip`. You can also build them with `./scripts/build-zip.sh` (output in `dist/`).
+Each release has one ZIP per skill: `handoff-pack-<version>.zip` and `handoff-implement-<version>.zip`. You can also build them with `./scripts/build-zip.sh` (output in `dist/`).
 
 ### `handoff-pack` in Claude (web and desktop)
 
-1. Download `handoff-pack.zip` from the [latest release](../../releases/latest).
+1. Download `handoff-pack-<version>.zip` from the [latest release](../../releases/latest).
 2. Make sure code execution is enabled in your Claude settings.
 3. In the Skills section, choose **Create skill → Upload a skill** and select the ZIP.
 
@@ -306,7 +306,7 @@ handoff-pack/
 │   ├── handoff-pack/            # evals.json and trigger-evals.json
 │   └── handoff-implement/       # evals.json and trigger-evals.json
 ├── scripts/
-│   ├── build-zip.sh             # Builds dist/handoff-pack.zip and dist/handoff-implement.zip
+│   ├── build-zip.sh             # Builds one versioned ZIP per skill in dist/
 │   ├── check-format-sync.sh     # Fails if a skill's copy of the contract differs
 │   └── validate.sh              # Frontmatter, versions, cited references, JSON, evals paths
 ├── CHANGELOG.md

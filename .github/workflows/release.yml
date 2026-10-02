@@ -19,4 +19,4 @@ jobs:
       - name: Attach ZIPs to the release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ github.event.release.tag_name }}" dist/handoff-pack.zip dist/handoff-implement.zip --clobber
+        run: gh release upload "${{ github.event.release.tag_name }}" dist/*.zip --clobber

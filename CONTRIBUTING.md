@@ -68,4 +68,4 @@ Wording changes, clarifications and new optional content that readers can ignore
 ./scripts/build-zip.sh
 ```
 
-The result is `dist/handoff-pack.zip` and `dist/handoff-implement.zip`, each with the skill folder at its root, ready to upload to Claude.
+The result is `dist/handoff-pack-<version>.zip` and `dist/handoff-implement-<version>.zip` (the version comes from `marketplace.json`), each with the skill folder at its root, ready to upload to Claude.
