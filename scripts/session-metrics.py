@@ -12,7 +12,9 @@ Usage:
   add --json for machine-readable output.
 """
 import argparse
+import glob
 import json
+import os
 import sys
 from collections import Counter
 from datetime import datetime
@@ -25,6 +27,8 @@ def ts(o):
 
 
 def load(path):
+    if os.path.isdir(path):  # a project folder: use its most recent session
+        path = max(glob.glob(os.path.join(path, "*.jsonl")), key=os.path.getmtime)
     rows = []
     with open(path, encoding="utf8") as f:
         for i, line in enumerate(f):
@@ -44,6 +48,30 @@ def skill_calls(rows, name="handoff-implement"):
             if b.get("type") == "tool_use" and b.get("name") == "Skill" and b["input"].get("skill") == name:
                 out.append((i, o["timestamp"]))
     return out
+
+
+def milestones(sel):
+    """Timestamps of the stages of a run, taken from the transcript itself (no extra tool calls)."""
+    m = {}
+    edits = ("Write", "Edit", "NotebookEdit")
+    for _, o in sel:
+        t = o.get("type")
+        if t == "assistant":
+            for b in o["message"].get("content", []):
+                if b.get("type") == "tool_use":
+                    n = b["name"]
+                    if n == "Skill" and "skill_loaded" not in m:
+                        m["skill_loaded"] = o["timestamp"]
+                    if n in edits and "first_edit" not in m and "skill_loaded" in m and "user_ok" in m:
+                        m["first_edit"] = o["timestamp"]
+                    if n.startswith("mcp__claude-in-chrome") and "first_browser" not in m:
+                        m["first_browser"] = o["timestamp"]
+                    m["last_tool"] = o["timestamp"]
+        elif t == "user" and "skill_loaded" in m and "user_ok" not in m:
+            c = o["message"].get("content")
+            if isinstance(c, str) and not c.startswith("<"):
+                m["user_ok"] = o["timestamp"]  # first real user message after the skill started
+    return m
 
 
 def metrics(rows, lo, hi):
@@ -98,6 +126,7 @@ def metrics(rows, lo, hi):
         "context_growth": (ctx_sizes[-1] - ctx_sizes[0]) if ctx_sizes else 0,  # what this run itself added
         **u,
         "cost_units": round(u["cost_units"]),  # input-token equivalents: one number to compare runs
+        "milestones": milestones(sel),
         "tools": dict(tools.most_common()),
         "reads": dict(reads.most_common()),
     }
