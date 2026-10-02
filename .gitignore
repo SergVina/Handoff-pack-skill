@@ -2,3 +2,5 @@ dist/
 .DS_Store
 *.skill
 *.zip
+# Local test metrics, not versioned
+metrics/

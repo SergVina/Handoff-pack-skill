@@ -77,6 +77,11 @@ def metrics(rows, lo, hi):
         u["input_uncached"] += x.get("input_tokens", 0)
         u["cache_read"] += x.get("cache_read_input_tokens", 0)
         u["cache_write"] += x.get("cache_creation_input_tokens", 0)
+        cc = x.get("cache_creation") or {}
+        w5 = cc.get("ephemeral_5m_input_tokens", x.get("cache_creation_input_tokens", 0))
+        w1h = cc.get("ephemeral_1h_input_tokens", 0)
+        # price ratios are the same for every model: cache write 1.25x (5m) or 2x (1h), cache read 0.1x, output 5x
+        u["cost_units"] += x.get("input_tokens", 0) + 1.25 * w5 + 2 * w1h + 0.1 * x.get("cache_read_input_tokens", 0) + 5 * x.get("output_tokens", 0)
         u["output"] += x.get("output_tokens", 0)
         u["thinking"] += (x.get("output_tokens_details") or {}).get("thinking_tokens", 0)
     times = [ts(o) for _, o in sel]
@@ -92,6 +97,7 @@ def metrics(rows, lo, hi):
         "context_end": ctx_sizes[-1] if ctx_sizes else 0,
         "context_growth": (ctx_sizes[-1] - ctx_sizes[0]) if ctx_sizes else 0,  # what this run itself added
         **u,
+        "cost_units": round(u["cost_units"]),  # input-token equivalents: one number to compare runs
         "tools": dict(tools.most_common()),
         "reads": dict(reads.most_common()),
     }

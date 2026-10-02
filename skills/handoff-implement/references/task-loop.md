@@ -21,7 +21,7 @@ Write a short plan before touching code and show it to the user (unless they ask
 - Approach: [2 to 4 lines; which pattern or reusable code you follow]
 - Decisions: [DL-xx you will exercise and within which limits; implementation details you will decide yourself (the user can veto them at the gate); or "none"]
 - New APIs: [libraries or framework APIs used for the first time in this task, or "no new APIs"]
-- Verification: [how each acceptance criterion will be checked; the "How to verify" command. If a criterion cannot be met as written with the pack's own rules and values, say so here and list it under Open points]
+- Verification: [how each acceptance criterion will be checked, in the fewest tool calls that cover it; the "How to verify" command. If a criterion cannot be met as written with the pack's own rules and values, say so here and list it under Open points]
 - Open points: [anything the card does not settle that changes what the user sees or can do: text the pack defines in only one language that you would have to translate, new text the pack does not define (with your proposed wording), values the user could want to tune, terms the pack leaves open, files the card does not list but the steps need; or "none"]
 ```
 
@@ -49,7 +49,7 @@ What needs the user's OK and what you may decide yourself is the line drawn in t
 
 For each acceptance criterion, as written:
 
-1. Check it in the way the criterion implies (run, open, call, inspect).
+1. Check it in the way the criterion implies (run, open, call, inspect). Every tool call re-reads the whole conversation, so the longer the session, the more each call costs: group the checks. For an app, write one script that sets up the state, runs the steps and prints a compact pass or fail per criterion, instead of one call per click or per probe; if it fails, fix the script and rerun it whole. Use screenshots only for criteria that are visual, and then once, never to read text that a script can print.
 2. Run the card's "How to verify" step and compare the result with the expected result stated there.
 3. Run the project's checks the working rules require (tests, linter, build).
 

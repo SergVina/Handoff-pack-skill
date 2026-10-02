@@ -13,9 +13,12 @@ Cost optimization of `handoff-implement` (tokens and time), measured with `scrip
 - `integrity-checks.md`: check 10 lists the task card fields itself, and the duplicated resumption text points to `SKILL.md`.
 - `report-template.md`: states that it carries section 10 of the contract in full.
 
+- `handoff-implement`: when resuming, reads only what the next task needs: progress list, log and next card of the action plan (not the whole file), and sections 6, 7 and 9 of the latest report; other IDs are found with grep.
+- `handoff-implement`: verification is grouped. Every tool call re-reads the whole conversation, so the checks go in one script per group of criteria instead of one call per probe; screenshots only for visual criteria, once. In the field run of T-08 the verification took 22 of 46 calls and 60% of the cache reads.
+
 ### Added
-- `scripts/session-metrics.py`: tokens, time, tool calls and starting context size of a run, from a Claude Code session transcript.
-- Eval 14 for `handoff-implement`: resuming must not load the full contract.
+- `scripts/session-metrics.py`: tokens, time, tool calls, starting context size and cost in input-token equivalents (`cost_units`) of a run, from a Claude Code session transcript. Replaces the manual event log and measuring script of the test harness, which cost extra tool calls.
+- Evals 14 and 15 for `handoff-implement`: resuming must not load the full contract, and verification must be grouped.
 
 ## [1.2.3] - 2026-10-02
 
