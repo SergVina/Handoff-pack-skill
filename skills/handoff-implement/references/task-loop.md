@@ -21,7 +21,7 @@ Write a short plan before touching code and show it to the user (unless they ask
 - Approach: [2 to 4 lines; which pattern or reusable code you follow]
 - Decisions: [DL-xx you will exercise and within which limits; implementation details you will decide yourself (the user can veto them at the gate); or "none"]
 - New APIs: [libraries or framework APIs used for the first time in this task, or "no new APIs"]
-- Verification: [how each acceptance criterion will be checked; the "How to verify" command]
+- Verification: [how each acceptance criterion will be checked; the "How to verify" command. If a criterion cannot be met as written with the pack's own rules and values, say so here and list it under Open points]
 - Open points: [anything the card does not settle that changes what the user sees or can do: text the pack defines in only one language that you would have to translate, new text the pack does not define (with your proposed wording), values the user could want to tune, terms the pack leaves open, files the card does not list but the steps need; or "none"]
 ```
 
@@ -42,7 +42,7 @@ What needs the user's OK and what you may decide yourself is the line drawn in t
 - If the card says to create a file that already exists (typically because an earlier task pulled it forward), do not overwrite it: complete it, say so in the mini-plan, record it in the progress log and propose the card update in the report (section 8).
 - Text the pack defines in only one language (labels, category names, messages) is not yours to translate or reword, and new text the pack does not define is yours to word only if a `DL-xx` covers UI copy. Otherwise put your proposed wording under "Open points", all together, and ask once.
 - If your change breaks tests of an earlier task, change only their fixtures (the data they use), not their expected results, unless a requirement changed; record it as a deviation with the reason. If an expected result must change, ask. An earlier task's test is not yours to "fix" so that it passes.
-- When you decide an implementation detail yourself, mark it in the progress log as not delegated at that moment, in the user's language. Do not leave it to be reconstructed when you write the report.
+- Open the task's line in the progress log as soon as you start implementing (status "in progress", in the user's language). When you decide an implementation detail yourself, append it to that line at that moment, marked as not delegated. The log is the only place that survives a long session, so this is how the report can be written later without reconstructing anything.
 - Write the tests the card asks for together with the code, not afterwards.
 
 ## 4. Literal verification
@@ -56,6 +56,19 @@ For each acceptance criterion, as written:
 A task is done only when every criterion passes. If one fails and you cannot fix it within the card's scope, the task is not done: leave it unticked, log it as blocked or partial with the reason, and report it. Do not reinterpret a criterion so it passes, and do not replace it with an easier one; if it seems wrong, propose the change.
 
 When a criterion is checked by a test you wrote in this task, show once that the test can fail: violate the criterion itself, that is, make the forbidden case happen (for example add the import the criterion forbids, or remove the condition that implements the rule), see the test fail, and revert it. Do not break an arbitrary line: a violation that fails nothing, or a line the code does not need, proves nothing. If no test fails, the test is not checking the criterion. An empty or badly written test "passes" every criterion.
+
+### A criterion the pack makes impossible
+
+Sometimes a criterion cannot be met as written, and the cause is the pack, not your code. Typical case: it promises that something changes when an input changes, while the pack's own formulas make that thing independent of the input (for example "changing a threshold updates the labels and the score", when the score depends only on the loss).
+
+Check for this at the mini-plan, when you write how each criterion will be verified, and raise it there under "Open points" together with the others: it costs one sentence at the gate instead of a rework at the end. If you only find it while verifying:
+
+1. Verify everything that can be measured, and say exactly what you verified and what you could not.
+2. Do not tick that criterion and do not tick the task. Do not reinterpret the criterion so it passes, and do not call it failed: your code did what the pack can express.
+3. Write it in the task's progress log line ("criterion N: pending the user's decision") and in the report (section 8, as a proposed change to the criterion).
+4. Tell the user at the end of the task, with the options: accept the measurable reading (then you tick it), or change the criterion in the pack through the chat.
+
+Only the user can accept a different reading of a criterion.
 
 ## 5. Record
 
@@ -73,7 +86,7 @@ Only these edits to the pack are yours to make: checkboxes, progress log lines, 
 
 ## 6. Version control
 
-Only if the pack's working rules or the user ask for it, and exactly as they say: branch name, commit format, one commit per task or per phase, checks that must pass before committing. If the rules require one branch per task and the previous task's branch is not merged yet, branch from the previous task's branch and say so in your status; ask if the rules say otherwise. If the rules say nothing and the user did not ask, do not commit; tell them the task is ready to be committed.
+Only if the pack's working rules or the user ask for it, and exactly as they say: branch name, commit format, one commit per task or per phase, checks that must pass before committing. If the rules require one branch per task and the previous task's branch is not merged yet, branch from the previous task's branch and say so in your status; ask if the rules say otherwise. If the pack or the user say anything about commit authorship or trailers, follow it exactly. If the rules say nothing and the user did not ask, do not commit; tell them the task is ready to be committed.
 
 ## 7. Tell the user and continue
 

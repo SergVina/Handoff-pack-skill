@@ -4,6 +4,23 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.3] - 2026-10-02
+
+Reliability fixes from the third field run of `handoff-implement` (task T-08) and from an audit of its real session transcript against the skill's rules. The audit found one failure the agent did not report: it ticked a criterion that, as written, could not be met.
+
+### Changed
+- `handoff-implement`: a criterion that cannot be met as written because the pack contradicts itself is raised at the mini-plan, under "Open points", with the other questions. If it is only found while verifying, the agent verifies what is measurable, does not tick the criterion or the task, does not reinterpret it, logs it as pending the user's decision and tells the user with the options. Integrity check 9 also looks for criteria the pack's own formulas make unreachable.
+- `handoff-implement`: a report in `handoff/reports/` is the agent's own earlier output. Its decisions and proposed changes count as approved only if the user answered them in the session or the pack's history cites the report; otherwise they are treated as not approved and the status says so.
+- `handoff-implement`: the progress log line of a task is opened when implementation starts ("in progress") and each implementation detail the agent decides is appended to it at that moment, marked as not delegated. A line left "in progress" means an interrupted task: read its notes and check the repository before continuing. Check 17 no longer flags it.
+- `handoff-implement`: a practical test separates decisions from details: if the user, trying it, could say "I expected it to work differently", it needs an OK (when a change applies, whether a confirmation appears and where, which control, what is shown while loading).
+- `handoff-implement`: do not give a precise count of other compatibility differences on resumption, because nothing scans for them; say that others exist.
+- `handoff-implement`: read the errors and warnings printed by what you verify (terminal, browser console); follow the pack's and the user's rules on commit authorship or trailers exactly.
+- `handoff-pack`: the verification checks that every criterion is reachable with the pack's own formulas and decisions; Update mode explains how to settle a criterion the agent could not meet (change it, or accept the measurable reading).
+- Contract (format 1, no version change): the "in progress" status of a progress log line.
+
+### Added
+- Four evals for `handoff-implement`: unprocessed report, criterion made impossible by the pack, interaction behavior that is not an implementation detail, and an interrupted task. Eval 8 no longer expects an exact count of other differences.
+
 ## [1.2.2] - 2026-10-02
 
 Fixes from the second field run of `handoff-implement` (task T-07, which closed a phase and produced the first phase report). The agent scored the skill 4/5; the 1.2.1 fixes all activated and helped.
