@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.5] - 2026-10-02
+
+Reliability fixes from the first fully autonomous run (task T-09, executed by a headless Sonnet 5.5 worker driven by an orchestrator). The worker followed the skill without breaking any rule and was honest about what it could not verify; the run showed what the skill did not cover.
+
+### Changed
+- `handoff-implement`: a criterion that cannot be verified because a tool is missing (a browser, a device, an account) is handled like an impossible criterion: raised at the mini-plan under "Open points" together with the tool each criterion needs and the instrument that measures it; if found later, run everything possible, do not tick the criteria or the task, do not claim them from indirect evidence, mark the progress log line "implemented, pending verification" and tell the user. No dependency is installed to get around it.
+- `handoff-implement`: a line marked "implemented, pending verification" tells the next session not to implement again: check the code is unchanged, run the missing verification and tick the task. Check 17 treats it as expected.
+- `handoff-implement`: a task that only waits for a verification is not a reason for a phase report by itself (status in the final message; the phase report when the phase ends; `partial` if one is written).
+- `handoff-implement`: implementation details are appended to the progress log at each checkpoint (after each group of files or each test run), never only at the end.
+- `handoff-implement`: development servers and other background processes are stopped before finishing; if that is not possible, the last message says the port or PID and how to stop it.
+- Contract (format 1, no version change): "implemented and pending verification" as an example status of a progress log line.
+
+### Added
+- Two evals for `handoff-implement`: a criterion that needs a tool the agent does not have, and an "implemented, pending verification" task that must not be implemented again.
+
 ## [1.2.4] - 2026-10-02
 
 Cost optimization of `handoff-implement` (tokens and time), measured with `scripts/session-metrics.py` on a clean run of task T-08 (baseline with 1.2.2: 41 API calls, 1,438,515 input-token equivalents, 60% of the cache reads in the verification phase).

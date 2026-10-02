@@ -21,7 +21,7 @@ Write a short plan before touching code and show it to the user (unless they ask
 - Approach: [2 to 4 lines; which pattern or reusable code you follow]
 - Decisions: [DL-xx you will exercise and within which limits; implementation details you will decide yourself (the user can veto them at the gate); or "none"]
 - New APIs: [libraries or framework APIs used for the first time in this task, or "no new APIs"]
-- Verification: [how each acceptance criterion will be checked, in the fewest tool calls that cover it; the "How to verify" command. If a criterion cannot be met as written with the pack's own rules and values, say so here and list it under Open points]
+- Verification: [how each acceptance criterion will be checked, in the fewest tool calls that cover it, the instrument that will measure what the criterion promises (for example counting the messages sent to a worker), and the tool it needs (browser, device, account) with whether you have it; if you lack a tool a criterion needs, list it under Open points; the "How to verify" command. If a criterion cannot be met as written with the pack's own rules and values, say so here and list it under Open points]
 - Open points: [anything the card does not settle that changes what the user sees or can do: text the pack defines in only one language that you would have to translate, new text the pack does not define (with your proposed wording), values the user could want to tune, terms the pack leaves open, files the card does not list but the steps need; or "none"]
 ```
 
@@ -42,7 +42,7 @@ What needs the user's OK and what you may decide yourself is the line drawn in t
 - If the card says to create a file that already exists (typically because an earlier task pulled it forward), do not overwrite it: complete it, say so in the mini-plan, record it in the progress log and propose the card update in the report (section 8).
 - Text the pack defines in only one language (labels, category names, messages) is not yours to translate or reword, and new text the pack does not define is yours to word only if a `DL-xx` covers UI copy. Otherwise put your proposed wording under "Open points", all together, and ask once.
 - If your change breaks tests of an earlier task, change only their fixtures (the data they use), not their expected results, unless a requirement changed; record it as a deviation with the reason. If an expected result must change, ask. An earlier task's test is not yours to "fix" so that it passes.
-- Open the task's line in the progress log as soon as you start implementing (status "in progress", in the user's language). When you decide an implementation detail yourself, append it to that line at that moment, marked as not delegated. The log is the only place that survives a long session, so this is how the report can be written later without reconstructing anything.
+- Open the task's line in the progress log as soon as you start implementing (status "in progress", in the user's language). When you decide an implementation detail yourself, append it to that line at the next checkpoint (after each group of files or each test run, never only at the end), marked as not delegated. The log is the only place that survives a long session, so this is how the report can be written later without reconstructing anything.
 - Write the tests the card asks for together with the code, not afterwards.
 
 ## 4. Literal verification
@@ -70,6 +70,18 @@ Check for this at the mini-plan, when you write how each criterion will be verif
 
 Only the user can accept a different reading of a criterion.
 
+### A criterion you cannot verify
+
+A different case: the criterion is fine, but you cannot run its verification because a tool is missing (the criteria are measured in a browser and you have none; a device; an account). Raise it at the mini-plan, under "Open points" (see the Verification line). If you only find it later:
+
+1. Run everything you can (tests, types, lint, build) and say exactly what you verified and what you could not.
+2. Do not tick the criteria or the task, and do not claim them from indirect evidence such as passing tests.
+3. Mark the task's progress log line "implemented, pending verification", with what is missing and which tool would settle it.
+4. Tell the user at the end of the task what is missing and how to complete it. Nothing else is blocked by this: continue with tasks that do not depend on it, if the user asked you to keep going.
+5. Do not install tools or dependencies to get around it without asking (a new dependency needs the user's OK).
+
+When the tool is available later, the line tells the next session to skip the implementation, check the code is unchanged, run the missing verification and tick the task.
+
 ## 5. Record
 
 - Tick the task in the progress list: `- [x] T-xx ...`.
@@ -89,6 +101,8 @@ Only these edits to the pack are yours to make: checkboxes, progress log lines, 
 Only if the pack's working rules or the user ask for it, and exactly as they say: branch name, commit format, one commit per task or per phase, checks that must pass before committing. If the rules require one branch per task and the previous task's branch is not merged yet, branch from the previous task's branch and say so in your status; ask if the rules say otherwise. If the pack or the user say anything about commit authorship or trailers, follow it exactly. If the rules say nothing and the user did not ask, do not commit; tell them the task is ready to be committed.
 
 ## 7. Tell the user and continue
+
+If you started a development server or any background process, stop it before you finish. If you cannot (the process outlives the command that started it), say so in your last message with its port or PID and how to stop it, so it is not left running unnoticed.
 
 Tell the user what was done and how it was verified, in two to four lines (plain language and how to try it, for a non-technical owner). Then:
 
