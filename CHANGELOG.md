@@ -4,6 +4,19 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+Cost optimization of `handoff-implement` (tokens and time), measured with `scripts/session-metrics.py`.
+
+### Changed
+- `handoff-implement`: when resuming a pack that already has progress, the agent no longer reads the 20 KB contract (`pack-format.md`); `SKILL.md`, `task-loop.md`, `integrity-checks.md` and `report-template.md` carry what a resumption needs. Reading load per resumed session goes from about 51.6 KB to 31.8 KB (-38%). Each task runs in a fresh session in practice, so this is the common case.
+- `integrity-checks.md`: check 10 lists the task card fields itself, and the duplicated resumption text points to `SKILL.md`.
+- `report-template.md`: states that it carries section 10 of the contract in full.
+
+### Added
+- `scripts/session-metrics.py`: tokens, time, tool calls and starting context size of a run, from a Claude Code session transcript.
+- Eval 14 for `handoff-implement`: resuming must not load the full contract.
+
 ## [1.2.3] - 2026-10-02
 
 Reliability fixes from the third field run of `handoff-implement` (task T-08) and from an audit of its real session transcript against the skill's rules. The audit found one failure the agent did not report: it ticked a criterion that, as written, could not be met.

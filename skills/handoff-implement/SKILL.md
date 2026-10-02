@@ -21,7 +21,7 @@ If the repository has no pack, do not improvise one: tell the user to create it 
 
 ## The pack format
 
-`references/pack-format.md` is the contract: files, IDs, statuses, sources, required sections, task card fields and report format. Read it the first time you work with a pack in a session. Two rules from it matter on every read:
+`references/pack-format.md` is the contract: files, IDs, statuses, sources, required sections, task card fields and report format. Read it in full the first time you open a pack (Startup). When you are resuming a pack that already has progress, do not read it: the two rules below, `references/task-loop.md` (task card fields, checks) and `references/report-template.md` (phase report) carry what you need, and the contract is 5,000 tokens you would carry in every call of the session. Open only the section you are unsure about (its Contents lists them). Two rules from it matter on every read:
 
 - **The pack is in the user's language.** Headings, table labels and field labels are translated; IDs, file names, paths, status emojis (✅ 🔶 ❓) and source values (`user`, `summary`, `repo`) are not. Locate sections by file, by the IDs they contain, by their position and by table shape, never by English heading text. A Spanish pack has "Criterios de aceptación", not "Acceptance criteria", and both are the same field.
 - **Only three statuses exist.** ✅ confirmed, 🔶 delegated within written limits, ❓ pending external information. Anything else is treated as ❓. A table with no Status column (older packs) inherits the pack status in the entry file header when that says the pack was validated by the user: say so in your status and continue. If the header does not say that, treat those items as ❓.
