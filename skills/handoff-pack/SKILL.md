@@ -4,7 +4,7 @@ description: Interviews the user until every important detail is settled and, on
 license: MIT
 compatibility: Designed for Claude chats (web and desktop); also works in Claude Code and other Agent Skills compatible agents. The generated pack is tool-agnostic Markdown for Claude Code, GitHub Copilot, Cursor and similar agents.
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
 ---
 
 # Handoff Pack
@@ -171,7 +171,7 @@ For very small Full projects you may merge `01` and `02`; if it is smaller than 
 
 **Do not invent technical facts.** Versions, endpoints, field names or repository structure only appear if the user or the repo provided them. Everything else is asked in the interview.
 
-**Small, self-contained tasks.** Each task must be executable in one agent session by reading its card and the documents it cites. Always include goal, context, files to create or modify, steps, verifiable acceptance criteria, how to verify, dependencies and what is out of scope. Order them so that the first ones deliver something that works end to end.
+**Small, self-contained tasks.** Each task must be executable in one agent session by reading its card and the documents it cites. Always include goal, context, files to create or modify, steps, verifiable acceptance criteria, how to verify, dependencies and what is out of scope. "How to verify" names a concrete input and its expected result (a fixture, a command, a value), never "an obvious case", because the agent would have to invent it. Where an earlier task may already have created a file a later card lists, write "create or complete"; where a task creates a structure that later tasks extend, say whether it is created complete or partial. Order them so that the first ones deliver something that works end to end.
 
 **Tool-agnostic.** Tasks do not use commands specific to a single tool. Kickoff prompts and agent files are the only tool-specific parts.
 
@@ -187,7 +187,7 @@ Check each point before delivering:
 2. **Coverage**: every statement in the Step 1 inventory appears in some file with its ID, and every area (including lens extras) is covered or confirmed as not applicable.
 3. **Zero assumptions**: no important fact is unvalidated. Everything is ✅, approved 🔶 or ❓ accepted by the user.
 4. **Traceability**: every requirement is covered by at least one task and every task cites at least one requirement.
-5. **Executable tasks**: each task has verifiable acceptance criteria and a concrete way to check them.
+5. **Executable tasks**: each task has verifiable acceptance criteria and a concrete way to check them, with named inputs (fixtures, commands, values) instead of "an obvious case".
 6. **Clear first step**: the entry file ends with a kickoff prompt that says where to start, and explains how to report back.
 7. **Agent files**: the files match the tools the user confirmed, and no existing file is overwritten.
 8. **Consistency**: names, paths and terms are the same across files and match the glossary.

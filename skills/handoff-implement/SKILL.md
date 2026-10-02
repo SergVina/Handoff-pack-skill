@@ -4,7 +4,7 @@ description: Reads and executes, with rigor, a handoff pack created by the hando
 license: MIT
 compatibility: Designed for coding agents with repository access (Claude Code, GitHub Copilot agent mode, Cursor and other Agent Skills compatible agents). Reads packs written in pack format 1 by the handoff-pack skill.
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
 ---
 
 # Handoff Implement
@@ -24,7 +24,7 @@ If the repository has no pack, do not improvise one: tell the user to create it 
 `references/pack-format.md` is the contract: files, IDs, statuses, sources, required sections, task card fields and report format. Read it the first time you work with a pack in a session. Two rules from it matter on every read:
 
 - **The pack is in the user's language.** Headings, table labels and field labels are translated; IDs, file names, paths, status emojis (✅ 🔶 ❓) and source values (`user`, `summary`, `repo`) are not. Locate sections by file, by the IDs they contain, by their position and by table shape, never by English heading text. A Spanish pack has "Criterios de aceptación", not "Acceptance criteria", and both are the same field.
-- **Only three statuses exist.** ✅ confirmed, 🔶 delegated within written limits, ❓ pending external information. Anything else is treated as ❓.
+- **Only three statuses exist.** ✅ confirmed, 🔶 delegated within written limits, ❓ pending external information. Anything else is treated as ❓. A table with no Status column (older packs) inherits the pack status in the entry file header when that says the pack was validated by the user: say so in your status and continue. If the header does not say that, treat those items as ❓.
 
 Talk to the user in their language, which is the language of the pack. Write the progress log and reports in that language too.
 
@@ -33,7 +33,7 @@ Talk to the user in their language, which is the language of the pack. Write the
 Do these steps in order the first time you open a pack, and whenever the user says "start the handoff" or equivalent.
 
 1. **Locate the pack.** `handoff/README.md` means a Full pack; `handoff/HANDOFF.md` means a Lite pack. If both exist, ask which one is current. If neither exists, stop and point the user to `handoff-pack` (see above).
-2. **Read the format version.** The entry file header has `**Pack format:** <n>`. If it is `1`, continue. If it is missing or unknown, work in compatibility mode: read what you can, list what differs from the contract, and ask the user before continuing. Do not rewrite the pack to fit the contract; that is the chat's job, with the user's approval.
+2. **Read the format version.** The entry file header has `**Pack format:** <n>`. If it is `1`, continue. If it is missing or unknown, work in compatibility mode: read what you can, list what differs from the contract, and ask the user before continuing. Do not rewrite the pack to fit the contract; that is the chat's job, with the user's approval. When you are resuming a pack that already has progress, use the shortened form described under "Resuming in a later session".
 3. **Read the whole pack** in the reading order given in the entry file. Read `00-START-HERE.md` too if it exists: it tells you the owner is not technical (see "Non-technical owner"). Read `AGENTS.md`, `CLAUDE.md` and the latest report in `handoff/reports/`, if any. Do not start from the task list: a task card cites decisions and constraints that only make sense with the context.
 4. **Check integrity.** Run every check in `references/integrity-checks.md`: duplicate IDs, citations of IDs that do not exist, requirements without a task, tasks without a requirement, cards without acceptance criteria or a way to verify, ❓ items blocking the next task, contradictions between files, and the pack against the code. Collect the findings; do not fix the pack.
 5. **Understanding gate.** Present to the user, in this order:
@@ -44,7 +44,7 @@ Do these steps in order the first time you open a pack, and whenever the user sa
 
    Then wait for an explicit OK. Do not write code before it. This is the agent-side twin of the validation gate in `handoff-pack`: a misunderstanding caught here costs a sentence, caught after implementation it costs a rewrite.
 
-**Resuming in a later session.** When the pack already has ticked tasks or progress log entries, you do not need the full gate again. Re-read the entry file, the progress list and log, the pending items, the latest report and the next task card, re-run the integrity checks that concern that task, and give the user a three-line status (where things stand, next task, anything blocking). If the user already named what to do and nothing new blocks it, continue; if anything changed or blocks, wait for their OK.
+**Resuming in a later session.** When the pack already has ticked tasks or progress log entries, you do not need the full gate again. Re-read the entry file, the progress list and log, the pending items, the latest report and the next task card, and re-run checks 1, 3, 4, 9, 10, 11, 12, 14, 15, 16 and 17 of `references/integrity-checks.md`, limited to the IDs the next card covers or cites. Give the user a three-line status (where things stand, next task, anything blocking). If the pack has no `Pack format` line, add after the status only the differences from the contract that affect the next task, one line each, say how many others exist and ask for a single OK; the full list is only needed at first startup. If the user already named what to do and nothing new blocks it, continue; if anything changed or blocks, wait for their OK.
 
 ## Task loop
 
@@ -52,9 +52,9 @@ One task at a time, in dependency order. The full procedure, with a mini-plan te
 
 1. **Pre-check.** Every task in "Depends on" is ticked; no ❓ blocks this task (check the "Tasks it blocks" column of the pending items and the card's related items); read the card and only the context it cites.
 2. **Mini-plan.** In a few lines: files, approach, how you will verify. If the plan reveals something the card does not settle, ask before implementing.
-3. **Implement** within the card's scope, following the conventions and the pattern to follow in `02-ARCHITECTURE.md` (or "Current state of the code" in Lite). Check the current official documentation of every library you use; do not rely on remembered APIs, which drift between versions.
-4. **Verify literally.** Check each acceptance criterion exactly as written and run the "How to verify" step. A task is not done if any criterion fails, even if the rest works: the criteria are what the user approved as "done".
-5. **Record.** Tick the task's checkbox in the progress list and add a line to the progress log: date, task, result, notes (decisions taken under a `DL-xx`, deviations, versions used when the stack says "Not pinned").
+3. **Implement** within the card's scope, following the conventions and the pattern to follow in `02-ARCHITECTURE.md` (or "Current state of the code" in Lite). Check the current official documentation of every library or framework API you use for the first time in this task, and write "no new APIs" in the mini-plan if there are none; do not rely on remembered APIs, which drift between versions.
+4. **Verify literally.** Check each acceptance criterion exactly as written and run the "How to verify" step. A task is not done if any criterion fails, even if the rest works: the criteria are what the user approved as "done". When a criterion is checked by a test you wrote in this task, show once that the test fails against a deliberate violation and then revert it, because a test that cannot fail proves nothing.
+5. **Record.** Tick the task's checkbox in the progress list and add a line to the progress log: date, task, result, notes (decisions taken under a `DL-xx`, deviations, work pulled forward from another task, versions used for "Not pinned" stack entries where the pack says to record them).
 6. **Version control.** Branch and commit only if the pack's working rules or the user ask for it, and then exactly as they say (branch names, commit format, checks that must pass).
 
 After each task, tell the user in a few lines what was done and how it was verified, then move to the next task only if the user asked you to keep going.
@@ -65,7 +65,7 @@ Each limit protects the user's authority over their own project. Keep them even 
 
 - **Do not modify `D-xx` decisions or `RF`/`RNF` requirements**, in the code or in the pack. They are the user's decisions, taken in an interview you did not attend. If one looks wrong or impossible, propose the change in the report (section 8) and, if it blocks you, ask.
 - **Decide 🔶 items only within their written limits** (the `DL-xx` row: what you may decide, what you may not, when to stop and ask) and record every such decision in the progress log and the report. The user delegated a bounded choice, not a blank cheque.
-- **Stop and ask on any decision that was not delegated.** If the user is not available, do not decide: mark the task as blocked in the progress log, say what you need, and move on only to tasks that do not depend on it. A guess presented as progress is worse than a visible block.
+- **Stop and ask on any decision that was not delegated.** Translating or wording text that the pack defines in only one language (labels, category names, messages) is one of them, unless a `DL-xx` covers copywriting: the user approved those words, not your version of them. List each such translation under "Open points" of the mini-plan. If the user is not available, do not decide: mark the task as blocked in the progress log, say what you need, and move on only to tasks that do not depend on it. A guess presented as progress is worse than a visible block.
 - **If the code contradicts the pack, stop and report it** with exact file paths and the IDs involved. Do not "fix" the pack on your own initiative and do not silently follow either side: the user decides which one is right.
 - **Do not expand scope**, even when something looks easy or obviously useful. Respect each card's "Out of scope". Note the idea in the report as a proposed change instead; unapproved extras are untested surface the user never asked for.
 - **Do not hide anything.** Every non-delegated decision, deviation and failed check goes into the report.

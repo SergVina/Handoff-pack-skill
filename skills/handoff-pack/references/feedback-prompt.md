@@ -29,7 +29,7 @@ Be factual and cite IDs (T-xx, RF-xx, RNF-xx, E-xx, D-xx, DL-xx, Q-xx) and file 
 
 Do not edit D-xx decisions or RF/RNF requirements yourself: propose the change in
 section 8. You may tick task checkboxes, append to the progress log and, where the
-stack says "Not pinned", record the version you used.
+stack says "Not pinned", record the versions you used where this pack's rules say to.
 ````
 
 ## Part B. Standalone prompt (for packs created without Part A)

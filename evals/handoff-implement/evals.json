@@ -241,6 +241,121 @@
         "Recommends creating the pack with the handoff-pack skill in a Claude chat",
         "Does not write code or create its own plan files"
       ]
+    },
+    {
+      "id": 8,
+      "name": "resume-compat-mode-single-ok-absent-status",
+      "prompt": "Sigue con el plan.",
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "content": "# Instructions for agents\n\nThis project has a handoff pack in `handoff/`.\n\n1. Before making any change, read `handoff/HANDOFF.md`.\n2. Work through its task list, one task at a time, in dependency order.\n3. Do not change a `D-xx` decision or an `RF/RNF` requirement without asking the user.\n4. If something marked ❓ blocks your task, ask before moving on. You may decide 🔶 items yourself, within the limits set in the \"Pending\" section.\n5. When you finish a task, tick its checkbox and update the progress log.\n6. If you find something that contradicts these documents, say so and propose the fix; do not ignore it.\n7. At the end of each phase, or as soon as you are blocked, write a report as described in \"Reporting back\".\n"
+        },
+        {
+          "path": "todo/__init__.py",
+          "content": ""
+        },
+        {
+          "path": "todo/cli.py",
+          "content": "import argparse\n\nfrom todo import store\n\n\ndef main(argv=None):\n    parser = argparse.ArgumentParser(prog=\"todo\")\n    sub = parser.add_subparsers(dest=\"cmd\", required=True)\n    add = sub.add_parser(\"add\")\n    add.add_argument(\"text\")\n    sub.add_parser(\"list\")\n    args = parser.parse_args(argv)\n    if args.cmd == \"add\":\n        store.add(args.text)\n    else:\n        for t in store.load():\n            print(t[\"text\"])\n"
+        },
+        {
+          "path": "todo/store.py",
+          "content": "import json\nfrom pathlib import Path\n\nPATH = Path(\"data/tasks.json\")\n\n\ndef load():\n    return json.loads(PATH.read_text()) if PATH.exists() else []\n\n\ndef add(text, due=None):\n    tasks = load()\n    tasks.append({\"text\": text, \"due\": due})\n    PATH.parent.mkdir(exist_ok=True)\n    PATH.write_text(json.dumps(tasks))\n"
+        },
+        {
+          "path": "handoff/HANDOFF.md",
+          "content": "# Task CLI due dates: handoff\n\n**Summary:** Add due dates to the `todo` command-line tool.\n**Mode:** Lite · **Project:** Existing · **Date:** 2026-09-01\n**Pack status:** Validated by the user on 2026-09-01. [0 🔶 and 0 ❓, see \"Pending\"]\n\n## Context\nUsers of the `todo` CLI want to give tasks a due date and list overdue ones.\n\n## Scope\n- **In:** due date on add, `todo overdue` command.\n- **Out:** reminders, notifications, time zones other than local.\n\n## Decisions\n| ID | Decision | Reason | Status | Source |\n|---|---|---|---|---|\n| D-01 | Store tasks in a JSON file at `data/tasks.json` | No database is available on the target machine | ✅ | user |\n\n## Current state of the code\nPython 3.12 package in `todo/`. Commands live in `todo/cli.py` (argparse). Storage in `todo/store.py`. Tests in `tests/` with pytest (`pytest -q`).\n\n## Requirements\n| ID | Requirement | Acceptance criterion | Status | Source |\n|---|---|---|---|---|\n| RF-01 | `todo add \"text\" --due YYYY-MM-DD` stores a due date | Given a valid date, when the task is added, then `todo list` shows it with its due date | ✅ | user |\n| RF-02 | `todo overdue` lists tasks whose due date is before today | Given tasks due yesterday and tomorrow, when running `todo overdue`, then only yesterday's is listed | ✅ | user |\n\n## Edge cases and errors\n| ID | Situation | Expected behavior |\n|---|---|---|\n| E-01 | `--due` with an invalid date | Exit code 2 and message `Invalid date, use YYYY-MM-DD` |\n\n## Tasks\n- [x] T-01 Due date on add\n- [ ] T-02 Overdue command\n\n### T-01. Due date on add\n- **Covers:** RF-01, E-01\n- **Depends on:** none\n- **Files:** modify `todo/cli.py` (new `--due` option); modify `todo/store.py` (persist `due`)\n- **Steps:** 1. Add `--due` to the `add` subcommand. 2. Validate the format. 3. Store it.\n- **Acceptance criteria:** RF-01 and E-01 behave as written; existing tests pass.\n- **How to verify:** `pytest -q` and `todo add \"x\" --due 2026-13-01` exits with code 2.\n- **Out of scope:** the `overdue` command.\n\n### T-02. Overdue command\n- **Covers:** RF-02\n- **Depends on:** T-01\n- **Files:** modify `todo/cli.py` (new `overdue` subcommand)\n- **Steps:** 1. Add the subcommand. 2. Filter tasks with `due` before today.\n- **Acceptance criteria:** RF-02 behaves as written.\n- **How to verify:** `pytest -q` with a new test for RF-02.\n- **Out of scope:** sorting options.\n\n## Progress log\n| Date | Task | Status | Agent notes |\n|---|---|---|---|\n| 2026-09-02 | T-01 | done | `pytest -q` 8 passed; invalid date exits with 2. |\n\n## Rules for the agent\n- Run `pytest -q` before marking a task done. Do not commit; the user commits.\n- Check the current official documentation of any library before using it; do not rely on remembered APIs.\n\n## Statement inventory\n| # | What the user said | Recorded in |\n|---|---|---|\n| 1 | \"I want to add a due date when I create a task\" | RF-01 |\n| 2 | \"Show me what's overdue\" | RF-02 |\n\n## Pending\nNone: everything was validated with the user.\n\n## Kickoff prompt\n```\nRead AGENTS.md and handoff/HANDOFF.md. Do not write code yet. Summarize the change\nin 5 lines, list anything that blocks T-01 and, if nothing does, start T-01.\n```\n\n## Reporting back\nAt the end of each phase, or as soon as you are blocked, write a report in\n`handoff/reports/phase-<N>-<YYYY-MM-DD>.md` with exactly these sections, as headings\nnumbered 1 to 9: 1. Summary, 2. Completed tasks, 3. Deviations from the plan,\n4. Decisions taken (delegated DL-xx or NOT delegated), 5. Findings about the codebase,\n6. Problems and blockers, 7. Questions for the user, 8. Proposed changes to the pack,\n9. Next steps. A section with nothing to report says \"None\".\n\n## Pack history\n| Version | Date | Change |\n|---|---|---|\n| v1 | 2026-09-01 | Initial pack, validated by the user. |\n"
+        }
+      ],
+      "expected_output": "Resumes a pack that has T-01 done and no Pack format line. Gives a status of about three lines, lists only the contract differences that affect T-02 (one line each), says how many others exist, treats the edge cases table without a Status column as validated because the header says so, and asks for a single OK. Does not ask a separate question about E-01 and does not edit the pack.",
+      "expectations": [
+        "Gives a short status (about three lines) instead of the full startup gate",
+        "Mentions that the pack has no Pack format line and works in compatibility mode",
+        "Lists only differences that affect T-02, one per line, and says how many other differences exist",
+        "States that the edge cases table has no Status column and that its items inherit the pack status validated by the user, instead of asking whether they are pending",
+        "Asks for a single OK, not several separate questions",
+        "Does not edit handoff/HANDOFF.md to add the Pack format line"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "translation-of-one-language-text-is-a-decision",
+      "prompt": "I approve the plan. Implement T-01.",
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "content": "# Instructions for agents\n\nThis project has a handoff pack in `handoff/`.\n\n1. Before making any change, read `handoff/HANDOFF.md`.\n2. Work through its task list, one task at a time, in dependency order.\n3. Do not change a `D-xx` decision or an `RF/RNF` requirement without asking the user.\n4. If something marked ❓ blocks your task, ask before moving on. You may decide 🔶 items yourself, within the limits set in the \"Pending\" section.\n5. When you finish a task, tick its checkbox and update the progress log.\n6. If you find something that contradicts these documents, say so and propose the fix; do not ignore it.\n7. At the end of each phase, or as soon as you are blocked, write a report as described in \"Reporting back\".\n"
+        },
+        {
+          "path": "todo/__init__.py",
+          "content": ""
+        },
+        {
+          "path": "todo/cli.py",
+          "content": "import argparse\n\nfrom todo import store\n\n\ndef main(argv=None):\n    parser = argparse.ArgumentParser(prog=\"todo\")\n    sub = parser.add_subparsers(dest=\"cmd\", required=True)\n    add = sub.add_parser(\"add\")\n    add.add_argument(\"text\")\n    sub.add_parser(\"list\")\n    args = parser.parse_args(argv)\n    if args.cmd == \"add\":\n        store.add(args.text)\n    else:\n        for t in store.load():\n            print(t[\"text\"])\n"
+        },
+        {
+          "path": "todo/store.py",
+          "content": "import json\nfrom pathlib import Path\n\nPATH = Path(\"data/tasks.json\")\n\n\ndef load():\n    return json.loads(PATH.read_text()) if PATH.exists() else []\n\n\ndef add(text):\n    tasks = load()\n    tasks.append({\"text\": text})\n    PATH.parent.mkdir(exist_ok=True)\n    PATH.write_text(json.dumps(tasks))\n"
+        },
+        {
+          "path": "handoff/HANDOFF.md",
+          "content": "# Task CLI due dates: handoff\n\n**Pack format:** 1\n**Summary:** Add due dates to the `todo` command-line tool.\n**Mode:** Lite · **Project:** Existing · **Date:** 2026-09-01\n**Pack status:** Validated by the user on 2026-09-01. [0 🔶 and 0 ❓, see \"Pending\"]\n\n## Context\nUsers of the `todo` CLI want to give tasks a due date and list overdue ones.\n\n## Scope\n- **In:** due date on add, `todo overdue` command.\n- **Out:** reminders, notifications, time zones other than local.\n\n## Decisions\n| ID | Decision | Reason | Status | Source |\n|---|---|---|---|---|\n| D-01 | Priority labels are `Alta`, `Media` and `Baja` | Chosen by the user; names are part of the product | ✅ | user |\n| D-02 | The CLI output is available in Spanish and English, selected with `--lang es\\|en` | The team works in both languages | ✅ | user |\n\n## Current state of the code\nPython 3.12 package in `todo/`. Commands live in `todo/cli.py` (argparse). Storage in `todo/store.py`. Tests in `tests/` with pytest (`pytest -q`).\n\n## Requirements\n| ID | Requirement | Acceptance criterion | Status | Source |\n|---|---|---|---|---|\n| RF-01 | `todo list` prints each task with its priority label | Given a task with priority 1, when running `todo list`, then the line shows the label for priority 1 | ✅ | user |\n| RF-02 | `--lang es\\|en` selects the output language | Given `--lang en`, when running `todo list`, then every label is in English | ✅ | user |\n\n## Edge cases and errors\n| ID | Situation | Expected behavior | Status | Source |\n|---|---|---|---|---|\n| E-01 | `--due` with an invalid date | Exit code 2 and message `Invalid date, use YYYY-MM-DD` | ✅ | user |\n\n## Tasks\n- [ ] T-01 Priority labels and language option\n\n### T-01. Priority labels and language option\n- **Covers:** RF-01, RF-02\n- **Depends on:** none\n- **Files:** modify `todo/cli.py` (new `--lang` option and label output); create `todo/labels.py` (label table)\n- **Steps:** 1. Create the label table. 2. Add `--lang`. 3. Print the label in `list`.\n- **Acceptance criteria:** RF-01 and RF-02 behave as written.\n- **How to verify:** `pytest -q` and `todo list --lang en` with a priority 1 task prints its English label.\n- **Out of scope:** colors and sorting.\n\n## Progress log\n| Date | Task | Status | Agent notes |\n|---|---|---|---|\n\n\n## Rules for the agent\n- Run `pytest -q` before marking a task done. Do not commit; the user commits.\n- Check the current official documentation of any library before using it; do not rely on remembered APIs.\n\n## Statement inventory\n| # | What the user said | Recorded in |\n|---|---|---|\n| 1 | \"I want to add a due date when I create a task\" | RF-01 |\n| 2 | \"Show me what's overdue\" | RF-02 |\n\n## Pending\nNone: everything was validated with the user.\n\n## Kickoff prompt\n```\nRead AGENTS.md and handoff/HANDOFF.md. Do not write code yet. Summarize the change\nin 5 lines, list anything that blocks T-01 and, if nothing does, start T-01.\n```\n\n## Reporting back\nAt the end of each phase, or as soon as you are blocked, write a report in\n`handoff/reports/phase-<N>-<YYYY-MM-DD>.md` with exactly these sections, as headings\nnumbered 1 to 9: 1. Summary, 2. Completed tasks, 3. Deviations from the plan,\n4. Decisions taken (delegated DL-xx or NOT delegated), 5. Findings about the codebase,\n6. Problems and blockers, 7. Questions for the user, 8. Proposed changes to the pack,\n9. Next steps. A section with nothing to report says \"None\".\n\n## Pack history\n| Version | Date | Change |\n|---|---|---|\n| v1 | 2026-09-01 | Initial pack, validated by the user. |\n"
+        }
+      ],
+      "expected_output": "Notices that D-01 defines the priority labels only in Spanish (Alta, Media, Baja) while D-02 requires English output, recognizes that wording the English labels is a non-delegated decision, lists it under Open points of the mini-plan and asks the user before implementing the English labels.",
+      "expectations": [
+        "Identifies that the labels Alta, Media and Baja are defined only in Spanish",
+        "Recognizes that choosing the English labels is a decision the pack does not delegate (there is no DL-xx)",
+        "Lists the translation under Open points of the mini-plan or asks the user explicitly, with options",
+        "Does not write English label names in code or tests before the user answers",
+        "Does not edit D-01 or D-02"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "traceability-table-is-not-a-duplicate-definition",
+      "prompt": "Start the handoff.",
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "content": "# Instructions for agents\n\nThis project has a handoff pack in `handoff/`.\n\n1. Before making any change, read `handoff/README.md`.\n2. Work through its task list, one task at a time, in dependency order.\n3. Do not change a `D-xx` decision or an `RF/RNF` requirement without asking the user.\n4. If something marked ❓ blocks your task, ask before moving on. You may decide 🔶 items yourself, within the limits set in the \"Pending\" section.\n5. When you finish a task, tick its checkbox and update the progress log.\n6. If you find something that contradicts these documents, say so and propose the fix; do not ignore it.\n7. At the end of each phase, or as soon as you are blocked, write a report as described in \"Reporting back\".\n"
+        },
+        {
+          "path": "handoff/README.md",
+          "content": "# Task CLI: handoff pack\n\n**Pack format:** 1\n**One-line summary:** A small command-line tool to manage tasks with due dates.\n**Mode:** Full · **Project:** New\n**Date:** 2026-09-01\n**Pack status:** Validated by the user on 2026-09-01. 0 🔶 and 0 ❓\n\n## How to use this pack\nReading order: 01 → 02 → 03 → 04 → 05.\n\n## Working rules for the agent\n- Run `pytest -q` before marking a task done. Do not commit; the user commits.\n- Check the current official documentation of every library before using it.\n\n## Kickoff prompt\n```\nRead AGENTS.md and every file in handoff/ in order. Do not write code yet.\n```\n\n## Recommended first steps\n1. T-01: the add command, so there is something that runs end to end.\n\n## Reporting back\nWrite a report in `handoff/reports/phase-<N>-<YYYY-MM-DD>.md` with 9 numbered sections.\n\n## Pack history\n| Version | Date | Change |\n|---|---|---|\n| v1 | 2026-09-01 | Initial pack, validated by the user. |\n"
+        },
+        {
+          "path": "handoff/01-CONTEXT.md",
+          "content": "# 01. Context\n\n## Problem or need\nPeople forget deadlines of small tasks.\n\n## Users and use cases\n| User | What they need to do | Frequency / context |\n|---|---|---|\n| Solo developer | Add and list tasks with a due date | Daily |\n\n## Goals\n- O-01 ✅ Add a task with a due date from the terminal.\n\n## Non-goals\n- Reminders and notifications.\n\n## Constraints\n| ID | Constraint | Type | Status | Source |\n|---|---|---|---|---|\n| C-01 | Python 3.12, standard library only | technical | ✅ | user |\n\n## Decisions made\n| ID | Decision | Reason | Discarded alternatives | Status | Source |\n|---|---|---|---|---|---|\n| D-01 | Store tasks in `data/tasks.json` | No database on the target machine | SQLite | ✅ | user |\n\n## Glossary\n| Term | Meaning in this project |\n|---|---|\n| Overdue | A task whose due date is before today |\n\n## Source material\nNone.\n\n## Statement inventory\n| # | What the user said | Recorded in |\n|---|---|---|\n| 1 | \"I want to add a due date when I create a task\" | RF-01 |\n| 2 | \"Show me what's overdue\" | RF-02 |\n"
+        },
+        {
+          "path": "handoff/02-ARCHITECTURE.md",
+          "content": "# 02. Architecture\n\n## Stack\n| Layer | Technology | Version | Status | Source |\n|---|---|---|---|---|\n| Language | Python | 3.12 | ✅ | user |\n\n## Current state\nNot applicable: new project.\n\n## Reference feature\nNot applicable: new project.\n\n## Reusable code\nNot applicable: new project.\n\n## Checklist for adding this kind of change\nNot applicable: new project.\n\n## Target state\nA `todo` package with `add`, `list` and `overdue` commands.\n\n## Folder structure\n```text\ntodo/cli.py\ntodo/store.py\ntests/\n```\n\n## Components and responsibilities\n| Component | Responsibility | Depends on | Path |\n|---|---|---|---|\n| CLI | Parse commands | Store | `todo/cli.py` |\n| Store | Read and write `data/tasks.json` | none | `todo/store.py` |\n\n## Data model\nA task has `text` and `due` (ISO date or null).\n\n## Integrations and external contracts\n| System | Purpose | Contract | Status |\n|---|---|---|---|\n| None | | | ✅ |\n\n## Conventions\nPEP 8, type hints.\n\n## Deployment and environments\nLocal only.\n"
+        },
+        {
+          "path": "handoff/03-REQUIREMENTS.md",
+          "content": "# 03. Requirements\n\n## Functional\n| ID | Requirement | Priority | Acceptance criterion | Status | Source |\n|---|---|---|---|---|---|\n| RF-01 | `todo add \"text\" --due YYYY-MM-DD` stores a due date | Must | Given a valid date, when the task is added, then `todo list` shows it | ✅ | user |\n| RF-02 | `todo overdue` lists tasks due before today | Must | Given tasks due yesterday and tomorrow, then only yesterday's is listed | ✅ | user |\n\n## Non-functional\n| ID | Category | Requirement | How it is measured | Status | Source |\n|---|---|---|---|---|---|\n| RNF-01 | Performance | Commands finish in under 200 ms for 1,000 tasks | `time todo list` on a 1,000-task file | ✅ | user |\n\n## Edge cases and errors\n| ID | Situation | Expected behavior | Status | Source |\n|---|---|---|---|---|\n| E-01 | `--due` with an invalid date | Exit code 2 and message `Invalid date, use YYYY-MM-DD` | ✅ | user |\n\n## Out of scope for this version\nRecurring tasks.\n"
+        },
+        {
+          "path": "handoff/04-ACTION-PLAN.md",
+          "content": "# 04. Action plan\n\n## Phase summary\n| Phase | Goal | Tasks | Visible result |\n|---|---|---|---|\n| 1 | Due dates | T-01 to T-02 | I can add a task with a date and list the overdue ones |\n\n## Progress\n- [ ] T-01 Due date on add\n- [ ] T-02 Overdue command\n\n## Task cards\n\n### T-01. Due date on add\n- **Covers:** RF-01, RNF-01, E-01\n- **Depends on:** none\n- **Goal:** `todo add` accepts `--due` and stores it.\n- **Required context:** D-01, 02-ARCHITECTURE.md (Components).\n- **Files:** create `todo/cli.py`, `todo/store.py`, `tests/test_add.py`, `tests/fixtures/tasks-1000.json`\n- **Pattern to follow:** none (new project)\n- **Steps:** 1. Create the store. 2. Create the CLI with `add` and `list`. 3. Validate the date.\n- **Acceptance criteria:**\n  - [ ] RF-01 and E-01 behave as written.\n  - [ ] RNF-01 is met with the 1,000-task fixture `tests/fixtures/tasks-1000.json`.\n- **How to verify:** `pytest -q`; `todo add \"x\" --due 2026-13-01` exits with code 2.\n- **Out of scope:** the `overdue` command.\n- **Related pending or delegated items:** none\n\n### T-02. Overdue command\n- **Covers:** RF-02\n- **Depends on:** T-01\n- **Goal:** `todo overdue` lists overdue tasks.\n- **Required context:** RF-02.\n- **Files:** modify `todo/cli.py`\n- **Pattern to follow:** `add` in `todo/cli.py`\n- **Steps:** 1. Add the subcommand. 2. Filter by date.\n- **Acceptance criteria:**\n  - [ ] RF-02 behaves as written.\n- **How to verify:** `pytest -q` with a new test for RF-02.\n- **Out of scope:** sorting options.\n- **Related pending or delegated items:** none\n\n## Traceability requirement → task\n| Requirement | Tasks |\n|---|---|\n| RF-01 | T-01 |\n| RF-02 | T-02 |\n| RNF-01 | T-01 |\n\n## Progress log\n| Date | Task | Status | Agent notes |\n|---|---|---|---|\n"
+        },
+        {
+          "path": "handoff/05-PENDING.md",
+          "content": "# 05. Pending items, delegated decisions and risks\n\nNo pending items or delegated decisions: everything was validated with the user.\n"
+        }
+      ],
+      "expected_output": "Reads a correct Full pack and presents the understanding gate. Does not report RF-01, RF-02 or RNF-01 as duplicated because they appear in the traceability table, and reports the integrity result as clean.",
+      "expectations": [
+        "Does not report any ID as duplicated or defined twice",
+        "States the integrity check result explicitly (no findings)",
+        "Gives a summary of what will be built in 10 lines or fewer",
+        "Names T-01 as the first task",
+        "Ends by asking for the user's OK before implementing",
+        "Does not write or modify any file"
+      ]
     }
   ]
 }
