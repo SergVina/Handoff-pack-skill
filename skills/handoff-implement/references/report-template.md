@@ -26,6 +26,9 @@ The report is how the IDE side talks back to the chat side. The user takes it to
 - A decision goes in the report of the phase in which it was taken, whatever task it affects (for example a decision taken during phase 2 about something implemented in phase 1).
 - If the pack has no `Pack format` line or no "Pack history" (compatibility mode), write `none (compatibility)` and `none` in the status line; the chat side will add both when it updates the pack.
 - Do not edit `D-xx`, `RF-xx` or `RNF-xx` in the pack; propose changes in section 8.
+- Section 2 lists every task of the phase, also one whose verification was done in another session (add a note). What you could not verify goes in the result column of that task and, if it blocks something, in section 6.
+- Decisions already declared in an earlier report of the same phase that the chat has not processed are repeated in section 4, so that this report is complete on its own.
+- If an earlier report of the same phase exists and is no longer true, write this one with the next suffix (`-2`, `-3`), list in section 6 what the earlier one no longer gets right, and do not edit it.
 
 ## Template
 
