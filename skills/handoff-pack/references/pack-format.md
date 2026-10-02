@@ -154,7 +154,7 @@ Format: prefix, hyphen, number of at least two digits (`RF-01`, `T-12`, `T-100`)
 | `Q` | External pending item | `05-PENDING.md` › External pending items | `HANDOFF.md` › Pending |
 | `R` | Known risk | `05-PENDING.md` › Known risks | Not used |
 
-Each ID is **defined** exactly once (as a table row, a goal line or a task card heading) and may be **cited** anywhere. Phases are numbered `1`, `2`... and statement inventory rows `1`, `2`...; neither is an ID.
+Each ID is **defined** exactly once (as a table row, a goal line or a task card heading) and may be **cited** anywhere. It is defined only where its prefix lives (the table above). A row in any other table, such as the traceability table of `04-ACTION-PLAN.md`, is a citation even when the ID is in its first column. Phases are numbered `1`, `2`... and statement inventory rows `1`, `2`...; neither is an ID.
 
 **Stability rules.** IDs are fixed once the user approves the pack:
 
@@ -316,7 +316,7 @@ Exactly these nine sections, in this order, as headings numbered `1.` to `9.`:
 8. **Proposed changes to the pack**: by ID (add, modify, supersede), with the reason.
 9. **Next steps**: the next tasks, in order.
 
-A section with nothing to report says so ("None") instead of being dropped. The agent cites IDs and file paths, does not edit `D`, `RF` or `RNF` items (it proposes changes in section 8), and may only tick task checkboxes, append to the progress log and, where the stack says "Not pinned", record the version used.
+A section with nothing to report says so ("None") instead of being dropped. The agent cites IDs and file paths, does not edit `D`, `RF` or `RNF` items (it proposes changes in section 8), and may only tick task checkboxes, append to the progress log and record the versions it used for stack entries marked "Not pinned", where the pack's own rules say to (by default in the Stack table of `02-ARCHITECTURE.md` and in the progress log).
 
 ## 11. Pack history and statement inventory
 

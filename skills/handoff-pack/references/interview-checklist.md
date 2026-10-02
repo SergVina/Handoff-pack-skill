@@ -57,7 +57,7 @@ The example questions are not a script: they show the expected depth. Adapt them
 
 ## 7. Interface and experience
 - Screens or commands needed, and visual references if any.
-- Languages, accessibility, supported devices.
+- Languages, accessibility, supported devices. If the product is multilingual, ask for every user-facing name, label and message in each language (category names, button texts, error messages), or ask whether the agent may word the other languages itself and record that as a delegated decision. A name defined in only one language forces the agent to decide the rest.
 - Tone and wording of important messages.
 
 ## 8. Integrations
