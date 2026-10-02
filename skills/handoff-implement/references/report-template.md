@@ -50,10 +50,10 @@ The report is how the IDE side talks back to the chat side. The user takes it to
 |---|---|---|---|
 
 ## 4. Decisions taken
-| Decision | Task | Delegated? | Notes |
-|---|---|---|---|
-| [what was decided] | T-02 | Delegated (DL-01), within its limits | |
-| [what was decided] | T-03 | **Not delegated**: approved by the user in the IDE on [date] / taken by the agent because [reason] | Needs confirmation in the chat |
+| Decision | Task | Delegated? | Discarded alternative | Notes |
+|---|---|---|---|---|
+| [what was decided] | T-02 | Delegated (DL-01), within its limits | [none, or the alternative] | |
+| [what was decided] | T-03 | **Not delegated**: approved by the user in the IDE on [date] / taken by the agent because [reason] | [the alternative, in this column and not in parentheses inside the decision] | Needs confirmation in the chat |
 
 ## 5. Findings about the codebase
 - [Fact the pack does not reflect or contradicts], in `path/to/file.ext`.

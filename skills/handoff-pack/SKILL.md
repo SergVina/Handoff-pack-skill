@@ -4,7 +4,7 @@ description: Interviews the user until every important detail is settled and, on
 license: MIT
 compatibility: Designed for Claude chats (web and desktop); also works in Claude Code and other Agent Skills compatible agents. The generated pack is tool-agnostic Markdown for Claude Code, GitHub Copilot, Cursor and similar agents.
 metadata:
-  version: "1.2.6"
+  version: "1.2.7"
 ---
 
 # Handoff Pack
@@ -38,7 +38,7 @@ Pick the mode in Step 0. Propose it to the user with a one-line reason and let t
 | **Lite** | A contained change in a known codebase: one feature in one area, a bug fix, a small refactor; roughly five tasks or fewer. | A single `handoff/HANDOFF.md` plus agent files. See `references/lite-mode.md`. |
 | **Update** | A pack already exists and something changed: the IDE agent sent a progress report, a decision changed, scope grew or shrank. | Only the affected files, with stable IDs and a change log. See `references/update-mode.md`. |
 
-All modes keep the same non-negotiables: interview until closed, validation gate before writing, no assumptions. Lite reduces the number of areas and files, never the rigor. If the scope grows during a Lite interview, propose switching to Full.
+All modes keep the same non-negotiables: interview until closed, validation gate before writing, no assumptions. The gate is not waived when nobody can answer: wait, do not apply. Lite reduces the number of areas and files, never the rigor. If the scope grows during a Lite interview, propose switching to Full.
 
 ## Workflow (Full and Lite)
 

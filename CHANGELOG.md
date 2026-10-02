@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.7] - 2026-10-02
+
+First run of `handoff-pack` in Update mode inside an agent with repository access, closing the loop after phase 3. It protected the pack well (it refused to turn unconfirmed decisions into `D-xx` with source `user`, caught that D-17 did not say what the report claimed, and rejected proposals that would add scope); its feedback showed what Update mode did not say.
+
+### Changed
+- `handoff-pack` (Update mode, contract section 7): an approval given by anyone other than the user (an orchestrating agent, an assistant acting for them) is never source `user`; the item is a ❓ with the user as owner, what is implemented meanwhile and how to revert it. The pending-items template documents an optional "How to revert" column.
+- `handoff-pack` (Update mode): when the user cannot answer, show the change summary and end the turn; proposals that add scope are ❓ marked "proposal", never tasks or `D-xx`; a pack-versus-code conflict that no ID contradicts literally is tracked as a ❓ with a visible note and the original text kept, after checking the literal text of each cited ID; report rows that read two ways are disambiguated with the agent's log; a report that replaces an earlier one is history and is cited in the pack history; a ❓ the user has not answered stays open ("registered, not resolved"); unconfirmed `repo` facts go in an optional section at the end of `02-ARCHITECTURE.md`.
+- `handoff-pack` (Update mode): no answer is not an OK. Running the new eval against a model showed the agent applying the changes without the gate because it was told nobody would answer; the gate now states that it is not waived in that case.
+- `handoff-pack` (Update mode): closing checklist: IDs compared before and after, `01` and `03` untouched unless the summary said otherwise, header counters recalculated, contract sections still met.
+- `handoff-implement`: the phase report's decisions table has a "Discarded alternative" column, so an alternative is never read as an implemented notice.
+- Contract (format 1, no version change): approvals by someone other than the user.
+
+### Added
+- One eval for `handoff-pack`: an Update with decisions approved provisionally by a third party.
+
 ## [1.2.6] - 2026-10-02
 
 Reliability fixes from the second autonomous run (task T-10, which closed a phase and had to deal with an earlier partial report). The worker followed the skill and verified every criterion in a browser; the run showed four gaps.

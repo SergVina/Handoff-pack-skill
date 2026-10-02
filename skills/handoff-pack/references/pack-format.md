@@ -187,6 +187,8 @@ Tables with a Source column say how each item was approved:
 | `summary` | An assistant proposal the user approved only through the validation summary or the writing delta. Allowed for low-impact items only. |
 | `repo` | Verified in the code of the repository. |
 
+An approval given by anyone other than the user (an orchestrating agent, an assistant acting for them) is never `user`: the item is recorded as ❓ with the user as who resolves it, what is implemented meanwhile and how to revert it, until the user confirms it.
+
 `summary` is never upgraded to `user`: the source records how strong the approval was, and a reader weighs a `summary` item as a weaker approval when deciding whether to ask.
 
 ## 8. Sections and tables of each file
