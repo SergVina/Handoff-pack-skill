@@ -4,6 +4,22 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.6] - 2026-10-02
+
+Reliability fixes from the second autonomous run (task T-10, which closed a phase and had to deal with an earlier partial report). The worker followed the skill and verified every criterion in a browser; the run showed four gaps.
+
+### Changed
+- `handoff-implement`: when a report for the same phase already exists and is no longer true (for example a partial one written when blocked), write the new one with the next suffix (`-2`, `-3`), list in its section 6 what the earlier one no longer gets right, and do not edit it. `report-template.md` also says: every task of the phase goes in section 2 (even if verified in another session), unprocessed decisions of an earlier report are repeated in section 4, and what could not be verified is stated per task.
+- `handoff-implement`: after stopping a background server, check with a request to its port that it no longer responds; a tool saying "stopped" is not proof.
+- `handoff-implement`: the mini-plan lists every visible text of each new screen (headers, empty states, errors, warnings); a text that turns up later is recorded as not approved and proposed for confirmation. In doubt between detail and visible behavior, it is visible.
+- `handoff-implement`: verification scripts print the whole table or output before and after a change and compute the difference, instead of picking the row expected to change.
+- `handoff-implement`: on resumption, open `integrity-checks.md` and apply only the named checks.
+- `handoff-implement`: the description now says that the pack's own reporting notes do not replace the skill. Running the phase-report request against a model showed the skill was not invoked and an earlier report was overwritten, because the pack's notes do not say never to overwrite.
+- `handoff-pack`: "How to verify" also names the observable change to expect; fixtures contain the cases a criterion needs on purpose; later cards of a new project cite the files an earlier task created as the pattern; rules that define a metric define its formula and how edge categories count.
+
+### Added
+- Two evals for `handoff-implement`: a phase report written when an earlier partial report of the same phase exists (22, naming the skill) and the same request without naming it (23, to check activation).
+
 ## [1.2.5] - 2026-10-02
 
 Reliability fixes from the first fully autonomous run (task T-09, executed by a headless Sonnet 5.5 worker driven by an orchestrator). The worker followed the skill without breaking any rule and was honest about what it could not verify; the run showed what the skill did not cover.

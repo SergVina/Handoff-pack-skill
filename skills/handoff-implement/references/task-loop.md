@@ -49,7 +49,7 @@ What needs the user's OK and what you may decide yourself is the line drawn in t
 
 For each acceptance criterion, as written:
 
-1. Check it in the way the criterion implies (run, open, call, inspect). Every tool call re-reads the whole conversation, so the longer the session, the more each call costs: group the checks. For an app, write one script that sets up the state, runs the steps and prints a compact pass or fail per criterion, instead of one call per click or per probe; if it fails, fix the script and rerun it whole. Use screenshots only for criteria that are visual, and then once, never to read text that a script can print.
+1. Check it in the way the criterion implies (run, open, call, inspect). Every tool call re-reads the whole conversation, so the longer the session, the more each call costs: group the checks. For an app, write one script that sets up the state, runs the steps and prints a compact pass or fail per criterion, instead of one call per click or per probe; if it fails, fix the script and rerun it whole. Print the whole table or output before and after the change and compute the difference; do not choose beforehand which row you expect to change, or you may read the wrong one and conclude that a criterion fails. Use screenshots only for criteria that are visual, and then once, never to read text that a script can print.
 2. Run the card's "How to verify" step and compare the result with the expected result stated there.
 3. Run the project's checks the working rules require (tests, linter, build).
 
@@ -102,7 +102,7 @@ Only if the pack's working rules or the user ask for it, and exactly as they say
 
 ## 7. Tell the user and continue
 
-If you started a development server or any background process, stop it before you finish. If you cannot (the process outlives the command that started it), say so in your last message with its port or PID and how to stop it, so it is not left running unnoticed.
+If you started a development server or any background process, stop it before you finish. After stopping it, check with a request to its port that it no longer responds: a tool saying "stopped" is not proof. If it still responds, do not say it is stopped. If you cannot (the process outlives the command that started it), say so in your last message with its port or PID and how to stop it, so it is not left running unnoticed.
 
 Tell the user what was done and how it was verified, in two to four lines (plain language and how to try it, for a non-technical owner). Then:
 
