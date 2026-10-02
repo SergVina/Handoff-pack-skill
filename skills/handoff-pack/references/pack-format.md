@@ -173,7 +173,7 @@ Exactly three statuses exist. They appear in the Status column of tables and aft
 | 🔶 Delegated | The agent may decide it, within limits the user explicitly approved. The limits live in the `DL-xx` row. |
 | ❓ Pending | External information is missing. The `Q-xx` row says who resolves it and which tasks it blocks. |
 
-There is no "assumed", "derived" or "proposed" status. A reader that finds any other status treats the item as ❓ and asks.
+There is no "assumed", "derived" or "proposed" status. A reader that finds any other status treats the item as ❓ and asks. The tables of `05-PENDING.md` (and the pending section of a Lite pack) have no Status column: the rows of the delegated decisions table are 🔶 and the rows of the external pending items table are ❓ by definition.
 
 Superseded (section 5) is a marking, not a status. A task's completion is its checkbox, not a status.
 
@@ -309,7 +309,7 @@ Exactly these nine sections, in this order, as headings numbered `1.` to `9.`:
 1. **Summary**: what was done in the phase, in 3 to 5 lines.
 2. **Completed tasks**: each `T-xx` with the verification run and its result.
 3. **Deviations from the plan**: what was done differently from the task cards, and why.
-4. **Decisions taken**: each decision, saying whether it was delegated (`DL-xx`) or not delegated. Non-delegated decisions are always declared.
+4. **Decisions taken**: each decision, saying whether it was delegated (`DL-xx`) or not delegated. Non-delegated decisions are always declared. A decision goes in the report of the phase in which it was taken, whatever task it affects.
 5. **Findings about the codebase**: facts the pack does not reflect or contradicts, with file paths.
 6. **Problems and blockers**: what failed or is blocked, with error messages if relevant.
 7. **Questions for the user**: numbered, each with the options the agent sees.

@@ -4,7 +4,7 @@ description: Interviews the user until every important detail is settled and, on
 license: MIT
 compatibility: Designed for Claude chats (web and desktop); also works in Claude Code and other Agent Skills compatible agents. The generated pack is tool-agnostic Markdown for Claude Code, GitHub Copilot, Cursor and similar agents.
 metadata:
-  version: "1.2.1"
+  version: "1.2.2"
 ---
 
 # Handoff Pack
@@ -159,7 +159,7 @@ For very small Full projects you may merge `01` and `02`; if it is smaller than 
 
 ## Writing rules
 
-**Explicit over elegant.** Write for a very capable reader who knows nothing about the project and cannot ask. Avoid "etc.", "as discussed", "the usual" or "similar to X" without saying what X is.
+**Explicit over elegant.** Write for a very capable reader who knows nothing about the project and cannot ask. Avoid "etc.", "as discussed", "the usual" or "similar to X" without saying what X is. A control or behavior named in a criterion states its observable result (what "go back" returns to), and a rule defines the terms it relies on (what counts as a "simple capture").
 
 **Stable IDs and cross-references.** `O-01` goal, `C-01` constraint, `D-01` decision, `RF-01` functional requirement, `RNF-01` non-functional, `E-01` edge case, `T-01` task, `DL-01` delegated decision, `Q-01` pending item, `R-01` risk. Tasks cite the requirements they cover. IDs are never reused or renumbered after the OK, including in later updates.
 
@@ -171,7 +171,7 @@ For very small Full projects you may merge `01` and `02`; if it is smaller than 
 
 **Do not invent technical facts.** Versions, endpoints, field names or repository structure only appear if the user or the repo provided them. Everything else is asked in the interview.
 
-**Small, self-contained tasks.** Each task must be executable in one agent session by reading its card and the documents it cites. Always include goal, context, files to create or modify, steps, verifiable acceptance criteria, how to verify, dependencies and what is out of scope. "How to verify" names a concrete input and its expected result (a fixture, a command, a value), never "an obvious case", because the agent would have to invent it. Where an earlier task may already have created a file a later card lists, write "create or complete"; where a task creates a structure that later tasks extend, say whether it is created complete or partial. Order them so that the first ones deliver something that works end to end.
+**Small, self-contained tasks.** Each task must be executable in one agent session by reading its card and the documents it cites. Always include goal, context, files to create or modify (every file the steps touch, including shared types, configuration and i18n dictionaries), steps, verifiable acceptance criteria, how to verify, dependencies and what is out of scope. "How to verify" names a concrete input and its expected result (a fixture, a command, a value), never "an obvious case", because the agent would have to invent it. Where an earlier task may already have created a file a later card lists, write "create or complete"; where a task creates a structure that later tasks extend, say whether it is created complete or partial. Order them so that the first ones deliver something that works end to end.
 
 **Tool-agnostic.** Tasks do not use commands specific to a single tool. Kickoff prompts and agent files are the only tool-specific parts.
 

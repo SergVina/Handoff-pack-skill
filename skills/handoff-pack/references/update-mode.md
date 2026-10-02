@@ -44,6 +44,7 @@ The same safeguards as in creation apply: high-impact changes get their own ques
 - Mark superseded items in place, for example: `~~RF-04 ...~~ Superseded on [date] by RF-09`.
 - Bump the pack version in the "Pack history" table of the entry file (`README.md` in Full, `HANDOFF.md` in Lite) with date and a one-line summary (v1, v2...). This is the pack's content version, not the `Pack format` line, which only changes with the format contract.
 - Keep the section and column order of the templates, so the agent can still locate everything by position and IDs (see `pack-format.md`).
+- If the pack predates the format contract (no `Pack format` line, no "Reporting back" or "Pack history" sections, tables without Status or Source columns), include the alignment in the change summary as separate rows, so the user approves it, and apply it with the update: add the line, the sections and the columns, without renumbering any ID.
 - Update the traceability table if requirements or tasks changed, and add new user statements to the statement inventory.
 
 ### 7. Verify and deliver

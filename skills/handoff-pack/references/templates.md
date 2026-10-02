@@ -268,7 +268,7 @@ Guidelines for splitting tasks: the first one should leave something runnable en
 
 ## 7. `handoff/05-PENDING.md`
 
-It only contains what the user explicitly approved leaving this way. If there is nothing, write "No pending items or delegated decisions: everything was validated with the user."
+It only contains what the user explicitly approved leaving this way. In each delegated decision, "Limits" also says where any parameter it introduces will live (configuration, settings panel) and which task exposes it, and defines every term the limits rely on. If there is nothing, write "No pending items or delegated decisions: everything was validated with the user."
 
 ````markdown
 # 05. Pending items, delegated decisions and risks

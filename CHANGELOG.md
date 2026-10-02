@@ -4,6 +4,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.2] - 2026-10-02
+
+Fixes from the second field run of `handoff-implement` (task T-07, which closed a phase and produced the first phase report). The agent scored the skill 4/5; the 1.2.1 fixes all activated and helped.
+
+### Changed
+- `handoff-implement`: the rule "stop and ask on any non-delegated decision" is now workable. The user's OK is needed for what changes what they see or can do (anything visible, a tunable value, an open requirement or term, the data model or shared types, and text the pack defines in one language or not at all). Pure implementation details may be decided by the agent, but are listed in the mini-plan or marked as not delegated in the progress log at the moment they are taken, and declared in the report, so nothing has to be reconstructed.
+- `handoff-implement`: new text not defined by the pack goes to "Open points" with proposed wording, all together, so a single OK settles it, unless a delegated decision covers UI copy.
+- `handoff-implement`: a card whose "Files" are not enough for its steps is incomplete, not wrong: list the extra files under "Open points", ask, and record the deviation.
+- `handoff-implement`: the deliberate violation that proves a test can fail must violate the criterion itself, not an arbitrary line.
+- `handoff-implement`: tests of earlier tasks broken by a new task change only their fixtures, never their expected results, unless a requirement changed; recorded as a deviation.
+- `handoff-implement`: cited context is re-read from the files at the start of each task, unless the same lines were read earlier in the same session and have not changed.
+- Phase report: a status line for packs without `Pack format` or "Pack history" (`none (compatibility)`), decisions go in the report of the phase in which they were taken, and section 4 is built from the decisions marked in the progress log.
+- Contract (format 1, no version change): the tables of `05-PENDING.md` have a fixed status (🔶 or ❓) by definition, and a decision goes in the report of the phase in which it was taken.
+- `handoff-pack`: card "Files" list every file the steps touch (shared types, configuration, i18n dictionaries); criteria state the observable result of a control and rules define their terms; delegated decisions say where their parameters live and which task exposes them; Update mode aligns a pack that predates the contract as separate rows of the change summary.
+
+### Added
+- Three evals for `handoff-implement`: user-visible decision versus implementation detail, the report status line in compatibility mode, and a card with insufficient files.
+
 ## [1.2.1] - 2026-10-02
 
 Fixes from the first real run of `handoff-implement` (task T-06 of a Spanish pack written before the format contract).
