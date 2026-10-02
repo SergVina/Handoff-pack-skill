@@ -4,7 +4,7 @@ description: Interviews the user until every important detail is settled and, on
 license: MIT
 compatibility: Designed for Claude chats (web and desktop); also works in Claude Code and other Agent Skills compatible agents. The generated pack is tool-agnostic Markdown for Claude Code, GitHub Copilot, Cursor and similar agents.
 metadata:
-  version: "1.2.2"
+  version: "1.2.3"
 ---
 
 # Handoff Pack
@@ -187,7 +187,7 @@ Check each point before delivering:
 2. **Coverage**: every statement in the Step 1 inventory appears in some file with its ID, and every area (including lens extras) is covered or confirmed as not applicable.
 3. **Zero assumptions**: no important fact is unvalidated. Everything is ✅, approved 🔶 or ❓ accepted by the user.
 4. **Traceability**: every requirement is covered by at least one task and every task cites at least one requirement.
-5. **Executable tasks**: each task has verifiable acceptance criteria and a concrete way to check them, with named inputs (fixtures, commands, values) instead of "an obvious case".
+5. **Executable tasks**: each task has verifiable acceptance criteria and a concrete way to check them, with named inputs (fixtures, commands, values) instead of "an obvious case", and reachable with the pack's own formulas and decisions: no criterion promises a change that another decision or formula of the pack rules out (for example "changing a threshold updates the score" when the score depends only on the loss).
 6. **Clear first step**: the entry file ends with a kickoff prompt that says where to start, and explains how to report back.
 7. **Agent files**: the files match the tools the user confirmed, and no existing file is overwritten.
 8. **Consistency**: names, paths and terms are the same across files and match the glossary.

@@ -29,6 +29,7 @@ Ask only about what changed and its knock-on effects, with the same rules as the
 - **Decisions the agent took that were not delegated**: the user must confirm them (they become `D-xx`) or ask for them to be reverted (a new task).
 - **New findings** about the codebase: they become facts with source `repo` once confirmed.
 - **Questions from the agent**: each one is answered or recorded as ❓.
+- **Criteria the agent could not meet because the pack contradicts itself**: the agent leaves the task unticked until the user decides, so settle it with them: change the criterion (and any decision that clashes with it) or accept the measurable reading the agent verified. Tell the user the agent is waiting for that answer.
 
 ### 5. Validation gate with a change summary
 Before editing, show a table in the chat and ask for an explicit OK:

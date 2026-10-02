@@ -22,7 +22,7 @@ The report is how the IDE side talks back to the chat side. The user takes it to
 - Write it in the user's language (the language of the pack). Translate section titles, keep their numbers `1.` to `9.`: the chat side finds sections by number.
 - All nine sections, in order. A section with nothing to report says "None" (translated); never drop it.
 - Be factual. Cite IDs (`T-xx`, `RF-xx`, `RNF-xx`, `E-xx`, `D-xx`, `DL-xx`, `Q-xx`) and file paths.
-- Declare every decision you took that was not delegated, even small ones and even if the user approved it in this session. The pack does not know about it until the report says so. Build section 4 from the decisions you marked as not delegated in the progress log as you went, so that you do not have to reconstruct them.
+- Declare every decision you took that was not delegated, even small ones and even if the user approved it in this session. The pack does not know about it until the report says so. Build section 4 from the decisions you appended, marked as not delegated, to the task's progress log line as you went, so that you do not have to reconstruct them.
 - A decision goes in the report of the phase in which it was taken, whatever task it affects (for example a decision taken during phase 2 about something implemented in phase 1).
 - If the pack has no `Pack format` line or no "Pack history" (compatibility mode), write `none (compatibility)` and `none` in the status line; the chat side will add both when it updates the pack.
 - Do not edit `D-xx`, `RF-xx` or `RNF-xx` in the pack; propose changes in section 8.
