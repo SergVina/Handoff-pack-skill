@@ -5,7 +5,7 @@ The report is how the IDE side talks back to the chat side. The user takes it to
 ## When to write it
 
 - At the end of each phase of the plan (the last task of the phase is done and verified).
-- As soon as you are blocked: a ❓ stops the next tasks, a non-delegated decision is needed and the user is not available, the code contradicts the pack, or a criterion cannot be met.
+- As soon as you are blocked: a ❓ stops the next tasks, a non-delegated decision is needed and the user is not available, the code contradicts the pack, or a criterion cannot be met. A task that is only waiting for a verification you could not run ("implemented, pending verification") is not a reason for a report by itself: say it in your status at the end of the task, and put it in the report of the phase when the phase ends, unless the user asks for one earlier. If you do write one, use phase status `partial`.
 - When the user asks for one. Outside the phase cycle, use the ad hoc name `report-<YYYY-MM-DD>.md`.
 
 ## Path

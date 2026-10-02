@@ -245,7 +245,7 @@ Columns are listed in order. **Status** and **Source** take the values of sectio
 2. Progress: one checkbox line per task, `- [ ] T-01 [short title]`; `- [x]` when done.
 3. Task cards: one card per task (section 9).
 4. Traceability requirement → task: Requirement · Tasks.
-5. Progress log: Date · Task · Status · Agent notes. Here "Status" is a short free-text result (for example in progress, done, blocked, partial), not the status legend of section 6. The agent opens a task's row when it starts working on it and completes it when it finishes.
+5. Progress log: Date · Task · Status · Agent notes. Here "Status" is a short free-text result (for example in progress, implemented and pending verification, done, blocked, partial), not the status legend of section 6. The agent opens a task's row when it starts working on it and completes it when it finishes.
 
 ### `handoff/05-PENDING.md`
 
