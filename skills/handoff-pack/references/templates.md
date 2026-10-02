@@ -281,6 +281,8 @@ It only contains what the user explicitly approved leaving this way. In each del
 | ID | What is missing | Who resolves it | Tasks it blocks | Meanwhile |
 |---|---|---|---|---|
 
+["Meanwhile" says what is implemented or assumed while it is open. For a decision that is already implemented but not confirmed by the user, add an optional last column "How to revert" (files to change); extra columns go after the required ones.]
+
 ## Known risks
 | ID | Risk | Likelihood | Impact | Agreed mitigation |
 |---|---|---|---|---|
