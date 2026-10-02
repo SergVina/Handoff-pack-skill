@@ -4,7 +4,7 @@ description: Reads and executes, with rigor, a handoff pack created by the hando
 license: MIT
 compatibility: Designed for coding agents with repository access (Claude Code, GitHub Copilot agent mode, Cursor and other Agent Skills compatible agents). Reads packs written in pack format 1 by the handoff-pack skill.
 metadata:
-  version: "1.2.3"
+  version: "1.2.4"
 ---
 
 # Handoff Implement
@@ -21,7 +21,7 @@ If the repository has no pack, do not improvise one: tell the user to create it 
 
 ## The pack format
 
-`references/pack-format.md` is the contract: files, IDs, statuses, sources, required sections, task card fields and report format. Read it the first time you work with a pack in a session. Two rules from it matter on every read:
+`references/pack-format.md` is the contract: files, IDs, statuses, sources, required sections, task card fields and report format. Read it in full the first time you open a pack (Startup). When you are resuming a pack that already has progress, do not read it: the two rules below, `references/task-loop.md` (task card fields, checks) and `references/report-template.md` (phase report) carry what you need, and the contract is 5,000 tokens you would carry in every call of the session. Open only the section you are unsure about (its Contents lists them). Two rules from it matter on every read:
 
 - **The pack is in the user's language.** Headings, table labels and field labels are translated; IDs, file names, paths, status emojis (✅ 🔶 ❓) and source values (`user`, `summary`, `repo`) are not. Locate sections by file, by the IDs they contain, by their position and by table shape, never by English heading text. A Spanish pack has "Criterios de aceptación", not "Acceptance criteria", and both are the same field.
 - **Only three statuses exist.** ✅ confirmed, 🔶 delegated within written limits, ❓ pending external information. Anything else is treated as ❓. A table with no Status column (older packs) inherits the pack status in the entry file header when that says the pack was validated by the user: say so in your status and continue. If the header does not say that, treat those items as ❓.
@@ -44,7 +44,7 @@ Do these steps in order the first time you open a pack, and whenever the user sa
 
    Then wait for an explicit OK. Do not write code before it. This is the agent-side twin of the validation gate in `handoff-pack`: a misunderstanding caught here costs a sentence, caught after implementation it costs a rewrite.
 
-**Resuming in a later session.** When the pack already has ticked tasks or progress log entries, you do not need the full gate again. Re-read the entry file, the progress list and log, the pending items, the latest report (see below on what it means) and the next task card, and re-run checks 1, 3, 4, 9, 10, 11, 12, 14, 15, 16 and 17 of `references/integrity-checks.md`, limited to the IDs the next card covers or cites. Give the user a three-line status (where things stand, next task, anything blocking). If the pack has no `Pack format` line, add after the status only the differences from the contract that affect the next task, one line each, say that others exist (do not give a number you did not verify) and ask for a single OK, then wait for it: this OK is required even when the user already told you to continue, because they have not seen the differences. Ask once per session; do not ask again for later tasks of the same session unless something new appears. The full list is only needed at first startup. In a pack that has the `Pack format` line, if the user already named what to do and nothing new blocks it, continue; if anything changed or blocks, wait for their OK.
+**Resuming in a later session.** When the pack already has ticked tasks or progress log entries, you do not need the full gate again. Read only what the next task needs, not whole files (a Full action plan is about 6,000 tokens that every later call re-reads): the entry file header; from `04-ACTION-PLAN.md` the progress list, the log and the next task card, found by their headings or with grep; the pending items; and the whole latest report (see below on what it means). Find the other IDs with grep. Then re-run checks 1, 3, 4, 9, 10, 11, 12, 14, 15, 16 and 17 of `references/integrity-checks.md`, limited to the IDs the next card covers or cites. Give the user a three-line status (where things stand, next task, anything blocking). If the pack has no `Pack format` line, add after the status only the differences from the contract that affect the next task, one line each, say that others exist (do not give a number you did not verify) and ask for a single OK, then wait for it: this OK is required even when the user already told you to continue, because they have not seen the differences. Ask once per session; do not ask again for later tasks of the same session unless something new appears. The full list is only needed at first startup. In a pack that has the `Pack format` line, if the user already named what to do and nothing new blocks it, continue; if anything changed or blocks, wait for their OK.
 
 **An "in progress" line in the progress log means a task was interrupted.** Read the notes in it and check the repository (`git status`, `git diff`) before continuing, and tell the user what you found instead of starting the task over.
 

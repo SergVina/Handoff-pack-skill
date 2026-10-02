@@ -1,6 +1,6 @@
 # Phase report template
 
-The report is how the IDE side talks back to the chat side. The user takes it to the Claude chat and the `handoff-pack` skill, in Update mode, turns it into changes to the pack, after the user confirms each one. It must follow section 10 of `pack-format.md` exactly, because the chat side reads it section by section.
+The report is how the IDE side talks back to the chat side. The user takes it to the Claude chat and the `handoff-pack` skill, in Update mode, turns it into changes to the pack, after the user confirms each one. It must follow section 10 of `pack-format.md` exactly, because the chat side reads it section by section. This file carries that section in full (path, nine sections, rules): you do not need to open the contract to write the report.
 
 ## When to write it
 
