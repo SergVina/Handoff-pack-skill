@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Two Agent Skills that carry a project from the chat to the IDE and back: handoff-pack turns ideas or existing projects into validated, agent-ready Markdown handoff packs; handoff-implement executes them in Claude Code, GitHub Copilot, Cursor and other IDE agents.",
-    "version": "1.2.1"
+    "version": "1.2.2"
   },
   "plugins": [
     {
