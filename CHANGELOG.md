@@ -4,21 +4,20 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.2.4] - 2026-10-02
 
-Cost optimization of `handoff-implement` (tokens and time), measured with `scripts/session-metrics.py`.
+Cost optimization of `handoff-implement` (tokens and time), measured with `scripts/session-metrics.py` on a clean run of task T-08 (baseline with 1.2.2: 41 API calls, 1,438,515 input-token equivalents, 60% of the cache reads in the verification phase).
 
 ### Changed
 - `handoff-implement`: when resuming a pack that already has progress, the agent no longer reads the 20 KB contract (`pack-format.md`); `SKILL.md`, `task-loop.md`, `integrity-checks.md` and `report-template.md` carry what a resumption needs. Reading load per resumed session goes from about 51.6 KB to 31.8 KB (-38%). Each task runs in a fresh session in practice, so this is the common case.
-- `integrity-checks.md`: check 10 lists the task card fields itself, and the duplicated resumption text points to `SKILL.md`.
+- `integrity-checks.md`: check 10 lists the task card fields itself, so a resumption does not need the contract for them.
 - `report-template.md`: states that it carries section 10 of the contract in full.
-
-- `handoff-implement`: when resuming, reads only what the next task needs: progress list, log and next card of the action plan (not the whole file), and sections 6, 7 and 9 of the latest report; other IDs are found with grep.
+- `handoff-implement`: when resuming, reads only what the next task needs: progress list, log and next card of the action plan (not the whole file), and other IDs are found with grep. The latest report is still read whole, because its handling as not approved depends on it.
 - `handoff-implement`: verification is grouped. Every tool call re-reads the whole conversation, so the checks go in one script per group of criteria instead of one call per probe; screenshots only for visual criteria, once. In the field run of T-08 the verification took 22 of 46 calls and 60% of the cache reads.
 
 ### Added
 - `scripts/session-metrics.py`: tokens, time, tool calls, starting context size and cost in input-token equivalents (`cost_units`) of a run, from a Claude Code session transcript. Replaces the manual event log and measuring script of the test harness, which cost extra tool calls.
-- Evals 14 and 15 for `handoff-implement`: resuming must not load the full contract, and verification must be grouped.
+- Evals 18 and 19 for `handoff-implement`: resuming must not load the full contract, and verification must be grouped.
 
 ## [1.2.3] - 2026-10-02
 

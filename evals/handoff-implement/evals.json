@@ -641,7 +641,46 @@
       ]
     },
     {
-      "id": 15,
+      "id": 18,
+      "name": "resume-does-not-load-the-full-contract",
+      "prompt": "Sigue con el plan.",
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "content": "# Instructions for agents\n\nThis project has a handoff pack in `handoff/`.\n\n1. Before making any change, read `handoff/HANDOFF.md`.\n2. Work through its task list, one task at a time, in dependency order.\n3. Do not change a `D-xx` decision or an `RF/RNF` requirement without asking the user.\n4. If something marked ❓ blocks your task, ask before moving on. You may decide 🔶 items yourself, within the limits set in the \"Pending\" section.\n5. When you finish a task, tick its checkbox and update the progress log.\n6. If you find something that contradicts these documents, say so and propose the fix; do not ignore it.\n7. At the end of each phase, or as soon as you are blocked, write a report as described in \"Reporting back\".\n"
+        },
+        {
+          "path": "todo/__init__.py",
+          "content": ""
+        },
+        {
+          "path": "todo/cli.py",
+          "content": "import argparse\nimport sys\nfrom datetime import date\n\nfrom todo import store\n\n\ndef main(argv=None):\n    parser = argparse.ArgumentParser(prog=\"todo\")\n    sub = parser.add_subparsers(dest=\"cmd\", required=True)\n    add = sub.add_parser(\"add\")\n    add.add_argument(\"text\")\n    add.add_argument(\"--due\")\n    sub.add_parser(\"list\")\n    args = parser.parse_args(argv)\n    if args.cmd == \"add\":\n        if args.due:\n            try:\n                date.fromisoformat(args.due)\n            except ValueError:\n                print(\"Invalid date, use YYYY-MM-DD\", file=sys.stderr)\n                raise SystemExit(2)\n        store.add(args.text, args.due)\n    else:\n        for t in store.load():\n            print(t[\"text\"], t.get(\"due\") or \"\")\n"
+        },
+        {
+          "path": "todo/store.py",
+          "content": "import json\nfrom pathlib import Path\n\nPATH = Path(\"data/tasks.json\")\n\n\ndef load():\n    return json.loads(PATH.read_text()) if PATH.exists() else []\n\n\ndef add(text, due=None):\n    tasks = load()\n    tasks.append({\"text\": text, \"due\": due})\n    PATH.parent.mkdir(exist_ok=True)\n    PATH.write_text(json.dumps(tasks))\n"
+        },
+        {
+          "path": "tests/test_add.py",
+          "content": "import pytest\n\nfrom todo import cli\n\n\ndef test_invalid_date_exits_with_2():\n    with pytest.raises(SystemExit) as e:\n        cli.main([\"add\", \"x\", \"--due\", \"2026-13-01\"])\n    assert e.value.code == 2\n"
+        },
+        {
+          "path": "handoff/HANDOFF.md",
+          "content": "# Task CLI due dates: handoff\n\n**Summary:** Add due dates to the `todo` command-line tool.\n**Mode:** Lite · **Project:** Existing · **Date:** 2026-09-01\n**Pack status:** Validated by the user on 2026-09-01. [0 🔶 and 0 ❓, see \"Pending\"]\n\n## Context\nUsers of the `todo` CLI want to give tasks a due date and list overdue ones.\n\n## Scope\n- **In:** due date on add, `todo overdue` command.\n- **Out:** reminders, notifications, time zones other than local.\n\n## Decisions\n| ID | Decision | Reason | Status | Source |\n|---|---|---|---|---|\n| D-01 | Store tasks in a JSON file at `data/tasks.json` | No database is available on the target machine | ✅ | user |\n\n## Current state of the code\nPython 3.12 package in `todo/`. Commands live in `todo/cli.py` (argparse). Storage in `todo/store.py`. Tests in `tests/` with pytest (`pytest -q`).\n\n## Requirements\n| ID | Requirement | Acceptance criterion | Status | Source |\n|---|---|---|---|---|\n| RF-01 | `todo add \"text\" --due YYYY-MM-DD` stores a due date | Given a valid date, when the task is added, then `todo list` shows it with its due date | ✅ | user |\n| RF-02 | `todo overdue` lists tasks whose due date is before today | Given tasks due yesterday and tomorrow, when running `todo overdue`, then only yesterday's is listed | ✅ | user |\n\n## Edge cases and errors\n| ID | Situation | Expected behavior |\n|---|---|---|\n| E-01 | `--due` with an invalid date | Exit code 2 and message `Invalid date, use YYYY-MM-DD` |\n\n## Tasks\n- [x] T-01 Due date on add\n- [ ] T-02 Overdue command\n\n### T-01. Due date on add\n- **Covers:** RF-01, E-01\n- **Depends on:** none\n- **Files:** modify `todo/cli.py` (new `--due` option); modify `todo/store.py` (persist `due`)\n- **Steps:** 1. Add `--due` to the `add` subcommand. 2. Validate the format. 3. Store it.\n- **Acceptance criteria:** RF-01 and E-01 behave as written; existing tests pass.\n- **How to verify:** `pytest -q` and `todo add \"x\" --due 2026-13-01` exits with code 2.\n- **Out of scope:** the `overdue` command.\n\n### T-02. Overdue command\n- **Covers:** RF-02\n- **Depends on:** T-01\n- **Files:** modify `todo/cli.py` (new `overdue` subcommand)\n- **Steps:** 1. Add the subcommand. 2. Filter tasks with `due` before today.\n- **Acceptance criteria:** RF-02 behaves as written.\n- **How to verify:** `pytest -q` with a new test for RF-02.\n- **Out of scope:** sorting options.\n\n## Progress log\n| Date | Task | Status | Agent notes |\n|---|---|---|---|\n| 2026-09-02 | T-01 | done | `pytest -q` 1 passed; invalid date exits with 2. |\n\n## Rules for the agent\n- Run `pytest -q` before marking a task done. Do not commit; the user commits.\n- Check the current official documentation of any library before using it; do not rely on remembered APIs.\n\n## Statement inventory\n| # | What the user said | Recorded in |\n|---|---|---|\n| 1 | \"I want to add a due date when I create a task\" | RF-01 |\n| 2 | \"Show me what's overdue\" | RF-02 |\n\n## Pending\nNone: everything was validated with the user.\n\n## Kickoff prompt\n```\nRead AGENTS.md and handoff/HANDOFF.md. Do not write code yet. Summarize the change\nin 5 lines, list anything that blocks T-01 and, if nothing does, start T-01.\n```\n\n## Reporting back\nAt the end of each phase, or as soon as you are blocked, write a report in\n`handoff/reports/phase-<N>-<YYYY-MM-DD>.md` with exactly these sections, as headings\nnumbered 1 to 9: 1. Summary, 2. Completed tasks, 3. Deviations from the plan,\n4. Decisions taken (delegated DL-xx or NOT delegated), 5. Findings about the codebase,\n6. Problems and blockers, 7. Questions for the user, 8. Proposed changes to the pack,\n9. Next steps. A section with nothing to report says \"None\".\n\n## Pack history\n| Version | Date | Change |\n|---|---|---|\n| v1 | 2026-09-01 | Initial pack, validated by the user. |\n"
+        }
+      ],
+      "expected_output": "Resumes a pack that already has progress without opening references/pack-format.md in full: it reads the whole latest report and only the progress list, log and next card of the plan, runs the resumption checks and keeps the compatibility OK rule. It consults a single section of the contract only with a concrete doubt.",
+      "expectations": [
+        "Does not read references/pack-format.md in full when resuming a pack that has ticked tasks",
+        "Still reads the latest report and treats it according to the rules for reports",
+        "Re-runs only the resumption checks (1, 3, 4, 9 to 12, 14 to 17), limited to the IDs of the next task",
+        "Checks the next card fields against the list in integrity-checks.md (check 10), without opening the contract",
+        "Does not edit handoff/HANDOFF.md"
+      ]
+    },
+    {
+      "id": 19,
       "name": "verification-grouped-in-few-calls",
       "prompt": "Implementa la T-02.",
       "files": [

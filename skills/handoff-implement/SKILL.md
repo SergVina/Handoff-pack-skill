@@ -4,7 +4,7 @@ description: Reads and executes, with rigor, a handoff pack created by the hando
 license: MIT
 compatibility: Designed for coding agents with repository access (Claude Code, GitHub Copilot agent mode, Cursor and other Agent Skills compatible agents). Reads packs written in pack format 1 by the handoff-pack skill.
 metadata:
-  version: "1.2.3"
+  version: "1.2.4"
 ---
 
 # Handoff Implement
